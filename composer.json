@@ -1,11 +1,12 @@
 {
     "name": "storipress/wordpress",
     "description": "WordPress API SDK for Laravel",
+    "license": "MIT",
     "type": "library",
     "require": {
+        "php": "^8.1",
         "illuminate/http": "^10.0",
         "illuminate/support": "^10.0",
-        "php": "^8.1",
         "justinrainbow/json-schema": "^5.2"
     },
     "require-dev": {
@@ -17,7 +18,6 @@
         "pestphp/pest-plugin-laravel": "^2.2",
         "pestphp/pest-plugin-type-coverage": "^2.2"
     },
-    "license": "MIT",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "autoload": {
