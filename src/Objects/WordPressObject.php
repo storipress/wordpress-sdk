@@ -14,9 +14,9 @@ abstract class WordPressObject
     private array $_map = [];
 
     final public function __construct(
-        protected readonly stdClass $raw,
+        protected readonly stdClass $rawData,
     ) {
-        foreach (get_object_vars($this->raw) as $key => $value) {
+        foreach (get_object_vars($this->rawData) as $key => $value) {
             $this->{$key} = $value;
         }
     }
@@ -26,9 +26,9 @@ abstract class WordPressObject
         return new static($data);
     }
 
-    public function getRaw(): stdClass
+    public function getRawData(): stdClass
     {
-        return $this->raw;
+        return $this->rawData;
     }
 
     public function __set(string $key, mixed $value): void

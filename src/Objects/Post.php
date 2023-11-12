@@ -20,6 +20,8 @@ class Post extends WordPressObject
 
     public string $modified_gmt;
 
+    public ?string $password;
+
     public string $slug;
 
     public string $status;
