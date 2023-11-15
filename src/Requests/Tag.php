@@ -99,12 +99,12 @@ class Tag extends Request
      * @throws HttpException
      * @throws UnexpectedValueException
      */
-    public function delete(int $tagId, bool $force = false): bool
+    public function delete(int $tagId): bool
     {
         $uri = sprintf('/tags/%d', $tagId);
 
         return $this->request('delete', $uri, [
-            'force' => $force,
+            'force' => true
         ]);
     }
 }

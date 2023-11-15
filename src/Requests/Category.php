@@ -99,12 +99,12 @@ class Category extends Request
      * @throws HttpException
      * @throws UnexpectedValueException
      */
-    public function delete(int $categoryId, bool $force = false): bool
+    public function delete(int $categoryId): bool
     {
         $uri = sprintf('/categories/%d', $categoryId);
 
         return $this->request('delete', $uri, [
-            'force' => $force,
+            'force' => true,
         ]);
     }
 }
