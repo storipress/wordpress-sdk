@@ -57,11 +57,13 @@ class Post extends Request
      * @throws HttpException
      * @throws UnexpectedValueException
      */
-    public function retrieve(int $postId): PostObject
+    public function retrieve(int $postId, string $context = 'view'): PostObject
     {
         $uri = sprintf('/posts/%d', $postId);
 
-        $data = $this->request('get', $uri);
+        $data = $this->request('get', $uri, [
+            'context' => $context,
+        ]);
 
         if (is_array($data)) {
             throw new UnexpectedValueException();
@@ -92,15 +94,17 @@ class Post extends Request
     }
 
     /**
-     * https://developer.wordpress.org/rest-api/reference/posts/#update-a-post
+     * https://developer.wordpress.org/rest-api/reference/posts/#delete-a-post
      *
      * @throws HttpException
      * @throws UnexpectedValueException
      */
-    public function delete(int $postId): bool
+    public function delete(int $postId, bool $force = false): bool
     {
         $uri = sprintf('/posts/%s', $postId);
 
-        return $this->request('delete', $uri);
+        return $this->request('delete', $uri, [
+            'force' => $force,
+        ]);
     }
 }

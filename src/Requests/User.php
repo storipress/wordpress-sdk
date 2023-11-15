@@ -57,11 +57,13 @@ class User extends Request
      * @throws HttpException
      * @throws UnexpectedValueException
      */
-    public function retrieve(int $userId): UserObject
+    public function retrieve(int $userId, string $context = 'view'): UserObject
     {
         $uri = sprintf('/users/%d', $userId);
 
-        $data = $this->request('get', $uri);
+        $data = $this->request('get', $uri, [
+            'context' => $context,
+        ]);
 
         if (is_array($data)) {
             throw new UnexpectedValueException();
@@ -97,10 +99,13 @@ class User extends Request
      * @throws HttpException
      * @throws UnexpectedValueException
      */
-    public function delete(int $userId): bool
+    public function delete(int $userId, int $reassign): bool
     {
         $uri = sprintf('/users/%d', $userId);
 
-        return $this->request('delete', $uri);
+        return $this->request('delete', $uri, [
+            'force' => true,
+            'reassign' => $reassign,
+        ]);
     }
 }

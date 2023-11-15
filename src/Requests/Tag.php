@@ -57,11 +57,13 @@ class Tag extends Request
      * @throws HttpException
      * @throws UnexpectedValueException
      */
-    public function retrieve(int $tagId): TagObject
+    public function retrieve(int $tagId, string $context = 'view'): TagObject
     {
         $uri = sprintf('/tags/%d', $tagId);
 
-        $data = $this->request('get', $uri);
+        $data = $this->request('get', $uri, [
+            'context' => 'view',
+        ]);
 
         if (is_array($data)) {
             throw new UnexpectedValueException();
@@ -97,10 +99,12 @@ class Tag extends Request
      * @throws HttpException
      * @throws UnexpectedValueException
      */
-    public function delete(int $tagId): bool
+    public function delete(int $tagId, bool $force = false): bool
     {
         $uri = sprintf('/tags/%d', $tagId);
 
-        return $this->request('delete', $uri);
+        return $this->request('delete', $uri, [
+            'force' => $force,
+        ]);
     }
 }

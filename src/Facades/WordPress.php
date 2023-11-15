@@ -10,7 +10,6 @@ use Storipress\WordPress\Requests\Post;
 use Storipress\WordPress\Requests\Tag;
 use Storipress\WordPress\Requests\User;
 
-
 /**
  * @method static Post post()
  * @method static Category category()

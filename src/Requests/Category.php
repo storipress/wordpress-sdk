@@ -57,11 +57,13 @@ class Category extends Request
      * @throws HttpException
      * @throws UnexpectedValueException
      */
-    public function retrieve(int $categoryId): CategoryObject
+    public function retrieve(int $categoryId, string $context = 'view'): CategoryObject
     {
         $uri = sprintf('/categories/%d', $categoryId);
 
-        $data = $this->request('get', $uri);
+        $data = $this->request('get', $uri, [
+            'context' => $context,
+        ]);
 
         if (is_array($data)) {
             throw new UnexpectedValueException();
@@ -97,10 +99,12 @@ class Category extends Request
      * @throws HttpException
      * @throws UnexpectedValueException
      */
-    public function delete(int $categoryId): bool
+    public function delete(int $categoryId, bool $force = false): bool
     {
         $uri = sprintf('/categories/%d', $categoryId);
 
-        return $this->request('delete', $uri);
+        return $this->request('delete', $uri, [
+            'force' => $force,
+        ]);
     }
 }
