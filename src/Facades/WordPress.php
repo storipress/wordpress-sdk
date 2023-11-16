@@ -7,7 +7,6 @@ namespace Storipress\WordPress\Facades;
 use Illuminate\Support\Facades\Facade;
 use Storipress\WordPress\Requests\Category;
 use Storipress\WordPress\Requests\Post;
-use Storipress\WordPress\Requests\Storipress;
 use Storipress\WordPress\Requests\Tag;
 use Storipress\WordPress\Requests\User;
 
@@ -16,7 +15,6 @@ use Storipress\WordPress\Requests\User;
  * @method static Category category()
  * @method static Tag tag()
  * @method static User user()
- * @method static Storipress storipress()
  * @method static \Storipress\WordPress\WordPress setSite(string $site)
  * @method static \Storipress\WordPress\WordPress site()
  * @method static \Storipress\WordPress\WordPress setUsername(string $username)
