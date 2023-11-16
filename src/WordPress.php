@@ -5,6 +5,7 @@ namespace Storipress\WordPress;
 use Illuminate\Http\Client\Factory;
 use Storipress\WordPress\Requests\Category;
 use Storipress\WordPress\Requests\Post;
+use Storipress\WordPress\Requests\Storipress;
 use Storipress\WordPress\Requests\Tag;
 use Storipress\WordPress\Requests\User;
 
@@ -17,6 +18,8 @@ class WordPress
     protected readonly Category $category;
 
     protected readonly User $user;
+
+    protected readonly Storipress $storipress;
 
     protected string $site;
 
@@ -34,6 +37,8 @@ class WordPress
         $this->category = new Category($this);
 
         $this->user = new User($this);
+
+        $this->storipress = new Storipress($this);
     }
 
     public function instance(): static
@@ -95,5 +100,10 @@ class WordPress
     public function user(): User
     {
         return $this->user;
+    }
+
+    public function storipress(): Storipress
+    {
+        return $this->storipress;
     }
 }

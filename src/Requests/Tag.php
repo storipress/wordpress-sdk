@@ -104,7 +104,7 @@ class Tag extends Request
         $uri = sprintf('/tags/%d', $tagId);
 
         return $this->request('delete', $uri, [
-            'force' => true
+            'force' => true,
         ]);
     }
 }
