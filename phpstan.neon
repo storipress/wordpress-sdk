@@ -9,4 +9,4 @@ parameters:
 
     paths:
         - src
-#        - tests
+        - tests
