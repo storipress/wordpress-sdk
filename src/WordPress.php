@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Storipress\WordPress;
 
 use Illuminate\Http\Client\Factory;
@@ -11,34 +13,34 @@ use Storipress\WordPress\Requests\User;
 
 class WordPress
 {
-    protected readonly Post $post;
-
-    protected readonly Tag $tag;
-
-    protected readonly Category $category;
+    protected readonly GeneralRequest $request;
 
     protected readonly User $user;
 
-    protected readonly GeneralRequest $request;
+    protected readonly Post $post;
+
+    protected readonly Category $category;
+
+    protected readonly Tag $tag;
 
     protected string $site;
 
     protected string $username;
 
-    protected string $applicationKey;
+    protected string $password;
 
     public function __construct(
         public Factory $http,
     ) {
-        $this->post = new Post($this);
-
-        $this->tag = new Tag($this);
-
-        $this->category = new Category($this);
+        $this->request = new GeneralRequest($this);
 
         $this->user = new User($this);
 
-        $this->request = new GeneralRequest($this);
+        $this->post = new Post($this);
+
+        $this->category = new Category($this);
+
+        $this->tag = new Tag($this);
     }
 
     public function instance(): static
@@ -46,16 +48,9 @@ class WordPress
         return $this;
     }
 
-    public function setApplicationKey(string $key): static
+    public function site(): string
     {
-        $this->applicationKey = $key;
-
-        return $this;
-    }
-
-    public function applicationKey(): string
-    {
-        return $this->applicationKey;
+        return $this->site;
     }
 
     public function setSite(string $site): static
@@ -65,9 +60,9 @@ class WordPress
         return $this;
     }
 
-    public function site(): string
+    public function username(): string
     {
-        return $this->site;
+        return $this->username;
     }
 
     public function setUsername(string $username): static
@@ -77,9 +72,26 @@ class WordPress
         return $this;
     }
 
-    public function username(): string
+    public function password(): string
     {
-        return $this->username;
+        return $this->password;
+    }
+
+    public function setPassword(string $key): static
+    {
+        $this->password = $key;
+
+        return $this;
+    }
+
+    public function request(): GeneralRequest
+    {
+        return $this->request;
+    }
+
+    public function user(): User
+    {
+        return $this->user;
     }
 
     public function post(): Post
@@ -95,15 +107,5 @@ class WordPress
     public function tag(): Tag
     {
         return $this->tag;
-    }
-
-    public function user(): User
-    {
-        return $this->user;
-    }
-
-    public function request(): GeneralRequest
-    {
-        return $this->request;
     }
 }

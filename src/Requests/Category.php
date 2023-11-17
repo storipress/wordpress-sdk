@@ -13,7 +13,7 @@ class Category extends Request
     /**
      * https://developer.wordpress.org/rest-api/reference/categories/#list-categories
      *
-     * @return CategoryObject[]
+     * @return array<int, CategoryObject>
      *
      * @throws HttpException
      * @throws UnexpectedValueException

@@ -12,18 +12,18 @@ use Storipress\WordPress\Requests\Tag;
 use Storipress\WordPress\Requests\User;
 
 /**
+ * @method static GeneralRequest request()
+ * @method static User user()
  * @method static Post post()
  * @method static Category category()
  * @method static Tag tag()
- * @method static User user()
- * @method static GeneralRequest request()
- * @method static \Storipress\WordPress\WordPress setSite(string $site)
- * @method static \Storipress\WordPress\WordPress site()
- * @method static \Storipress\WordPress\WordPress setUsername(string $username)
- * @method static \Storipress\WordPress\WordPress username()
- * @method static \Storipress\WordPress\WordPress setApplicationKey(string $key)
- * @method static \Storipress\WordPress\WordPress applicationKey()
  * @method static \Storipress\WordPress\WordPress instance()
+ * @method static \Storipress\WordPress\WordPress site()
+ * @method static \Storipress\WordPress\WordPress setSite(string $site)
+ * @method static \Storipress\WordPress\WordPress username()
+ * @method static \Storipress\WordPress\WordPress setUsername(string $username)
+ * @method static \Storipress\WordPress\WordPress password()
+ * @method static \Storipress\WordPress\WordPress setPassword(string $password)
  */
 class WordPress extends Facade
 {

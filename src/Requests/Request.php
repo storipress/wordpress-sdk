@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Storipress\WordPress\Requests;
 
 use Illuminate\Http\Client\Response;
@@ -24,7 +26,7 @@ abstract class Request
      * @param  'get'|'post'|'patch'|'delete'  $method
      * @param  non-empty-string  $path
      * @param  array<mixed>  $options
-     * @return ($method is 'delete' ? bool : stdClass|stdClass[])
+     * @return ($method is 'delete' ? bool : stdClass|array<int, stdClass>)
      *
      * @throws UnexpectedValueException
      * @throws HttpException
@@ -37,7 +39,7 @@ abstract class Request
         $response = $this
             ->app
             ->http
-            ->withBasicAuth($this->app->username(), $this->app->applicationKey())
+            ->withBasicAuth($this->app->username(), $this->app->password())
             ->{$method}($this->getUrl($path), $options);
 
         if (!($response instanceof Response)) {

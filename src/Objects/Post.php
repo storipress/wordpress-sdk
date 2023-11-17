@@ -14,7 +14,7 @@ class Post extends WordPressObject
 
     public string $date_gmt;
 
-    public RenderObject $guid;
+    public Render $guid;
 
     public string $modified;
 
@@ -30,11 +30,11 @@ class Post extends WordPressObject
 
     public string $link;
 
-    public RenderObject $title;
+    public Render $title;
 
-    public RenderObject $content;
+    public Render $content;
 
-    public RenderObject $excerpt;
+    public Render $excerpt;
 
     public int $author;
 
@@ -64,13 +64,13 @@ class Post extends WordPressObject
 
     public static function from(stdClass $data): static
     {
-        $data->guid = RenderObject::from($data->guid);
+        $data->guid = Render::from($data->guid);
 
-        $data->title = RenderObject::from($data->title);
+        $data->title = Render::from($data->title);
 
-        $data->content = RenderObject::from($data->content);
+        $data->content = Render::from($data->content);
 
-        $data->excerpt = RenderObject::from($data->excerpt);
+        $data->excerpt = Render::from($data->excerpt);
 
         return parent::from($data);
     }

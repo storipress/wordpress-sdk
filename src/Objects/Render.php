@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Storipress\WordPress\Objects;
 
-class RenderObject extends WordPressObject
+class Render extends WordPressObject
 {
     public ?string $raw;
 

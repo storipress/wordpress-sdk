@@ -13,7 +13,7 @@ class User extends Request
     /**
      * https://developer.wordpress.org/rest-api/reference/users/#list-users
      *
-     * @return UserObject[]
+     * @return array<int, UserObject>
      *
      * @throws HttpException
      * @throws UnexpectedValueException

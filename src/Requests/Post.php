@@ -13,7 +13,7 @@ class Post extends Request
     /**
      * https://developer.wordpress.org/rest-api/reference/posts/#list-posts
      *
-     * @return PostObject[]
+     * @return array<int, PostObject>
      *
      * @throws HttpException
      * @throws UnexpectedValueException

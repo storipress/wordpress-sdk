@@ -13,7 +13,7 @@ class Tag extends Request
     /**
      * https://developer.wordpress.org/rest-api/reference/tags/#list-tags
      *
-     * @return TagObject[]
+     * @return array<int, TagObject>
      *
      * @throws HttpException
      * @throws UnexpectedValueException

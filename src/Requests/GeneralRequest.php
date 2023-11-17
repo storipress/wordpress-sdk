@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Storipress\WordPress\Requests;
 
 use stdClass;
@@ -9,7 +11,7 @@ class GeneralRequest extends Request
     /**
      * @param  non-empty-string  $path
      * @param  array<mixed>  $arguments
-     * @return stdClass|stdClass[]
+     * @return stdClass|array<int, stdClass>
      *
      * @throws \Storipress\WordPress\Exceptions\HttpException
      * @throws \Storipress\WordPress\Exceptions\UnexpectedValueException
@@ -22,7 +24,7 @@ class GeneralRequest extends Request
     /**
      * @param  non-empty-string  $path
      * @param  array<mixed>  $arguments
-     * @return stdClass|stdClass[]
+     * @return stdClass|array<int, stdClass>
      *
      * @throws \Storipress\WordPress\Exceptions\HttpException
      * @throws \Storipress\WordPress\Exceptions\UnexpectedValueException
@@ -35,7 +37,7 @@ class GeneralRequest extends Request
     /**
      * @param  non-empty-string  $path
      * @param  array<mixed>  $arguments
-     * @return stdClass|stdClass[]
+     * @return stdClass|array<int, stdClass>
      *
      * @throws \Storipress\WordPress\Exceptions\HttpException
      * @throws \Storipress\WordPress\Exceptions\UnexpectedValueException
