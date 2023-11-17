@@ -1,6 +1,6 @@
 {
-    "name": "storipress/wordpress",
-    "description": "WordPress API SDK for Laravel",
+    "name": "storipress/wordpress-sdk",
+    "description": "WordPress REST API SDK for Laravel",
     "license": "MIT",
     "type": "library",
     "require": {
