@@ -53,7 +53,7 @@ jobs:
         run: vendor/bin/pest --type-coverage --min=90
 
   testing:
-    name: PHP ${{ matrix.php }}
+    name: PHP ${{ matrix.php }} (Testing)
 
     runs-on: ubuntu-latest
 
