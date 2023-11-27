@@ -39,6 +39,8 @@ abstract class Request
         $response = $this
             ->app
             ->http
+            ->withoutVerifying()
+            ->withoutRedirecting()
             ->withBasicAuth($this->app->username(), $this->app->password())
             ->{$method}($this->getUrl($path), $options);
 
