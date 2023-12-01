@@ -39,6 +39,7 @@ abstract class Request
         $response = $this
             ->app
             ->http
+            ->withUserAgent($this->app->userAgent())
             ->withBasicAuth($this->app->username(), $this->app->password())
             ->{$method}($this->getUrl($path), $options);
 

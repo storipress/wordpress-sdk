@@ -29,6 +29,8 @@ class WordPress
 
     protected string $password;
 
+    protected string $userAgent = 'Storipress/WordPress/2023-12-01';
+
     public function __construct(
         public Factory $http,
     ) {
@@ -107,5 +109,17 @@ class WordPress
     public function tag(): Tag
     {
         return $this->tag;
+    }
+
+    public function userAgent(): string
+    {
+        return $this->userAgent;
+    }
+
+    public function withUserAgent(string $userAgent): static
+    {
+        $this->userAgent = $userAgent;
+
+        return $this;
     }
 }
