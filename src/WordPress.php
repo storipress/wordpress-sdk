@@ -29,7 +29,7 @@ class WordPress
 
     protected string $password;
 
-    protected ?string $userAgent;
+    protected ?string $userAgent = null;
 
     public function __construct(
         public Factory $http,
@@ -86,6 +86,18 @@ class WordPress
         return $this;
     }
 
+    public function userAgent(): ?string
+    {
+        return $this->userAgent;
+    }
+
+    public function withUserAgent(string $userAgent): static
+    {
+        $this->userAgent = $userAgent;
+
+        return $this;
+    }
+
     public function request(): GeneralRequest
     {
         return $this->request;
@@ -109,17 +121,5 @@ class WordPress
     public function tag(): Tag
     {
         return $this->tag;
-    }
-
-    public function userAgent(): ?string
-    {
-        return $this->userAgent;
-    }
-
-    public function withUserAgent(string $userAgent): static
-    {
-        $this->userAgent = $userAgent;
-
-        return $this;
     }
 }
