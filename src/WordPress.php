@@ -29,6 +29,8 @@ class WordPress
 
     protected string $password;
 
+    protected ?string $userAgent = null;
+
     public function __construct(
         public Factory $http,
     ) {
@@ -80,6 +82,18 @@ class WordPress
     public function setPassword(string $key): static
     {
         $this->password = $key;
+
+        return $this;
+    }
+
+    public function userAgent(): ?string
+    {
+        return $this->userAgent;
+    }
+
+    public function withUserAgent(string $userAgent): static
+    {
+        $this->userAgent = $userAgent;
 
         return $this;
     }

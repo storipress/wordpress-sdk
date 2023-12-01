@@ -36,13 +36,16 @@ abstract class Request
         string $path,
         array $options = [],
     ): stdClass|array|bool {
-        $response = $this
-            ->app
-            ->http
+        $http = $this->app->http
             ->withoutVerifying()
             ->withoutRedirecting()
-            ->withBasicAuth($this->app->username(), $this->app->password())
-            ->{$method}($this->getUrl($path), $options);
+            ->withBasicAuth($this->app->username(), $this->app->password());
+
+        if ($this->app->userAgent()) {
+            $http->withUserAgent($this->app->userAgent());
+        }
+
+        $response = $http->{$method}($this->getUrl($path), $options);
 
         if (!($response instanceof Response)) {
             throw new UnexpectedValueException();

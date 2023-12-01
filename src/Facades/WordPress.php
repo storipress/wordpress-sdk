@@ -24,6 +24,8 @@ use Storipress\WordPress\Requests\User;
  * @method static \Storipress\WordPress\WordPress setUsername(string $username)
  * @method static \Storipress\WordPress\WordPress password()
  * @method static \Storipress\WordPress\WordPress setPassword(string $password)
+ * @method static \Storipress\WordPress\WordPress userAgent()
+ * @method static \Storipress\WordPress\WordPress withUserAgent(string $userAgent)
  */
 class WordPress extends Facade
 {
