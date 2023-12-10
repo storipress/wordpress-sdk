@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft-04/schema#",
+  "id": "/schemas/exception",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "code": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "status": {
+          "type": "integer"
+        },
+        "term_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "additional_data": {
+      "type": "array"
+    }
+  },
+  "required":[
+    "code",
+    "message",
+    "data"
+  ]
+}

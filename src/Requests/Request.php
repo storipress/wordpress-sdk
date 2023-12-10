@@ -5,11 +5,21 @@ declare(strict_types=1);
 namespace Storipress\WordPress\Requests;
 
 use Illuminate\Http\Client\Response;
+use JsonSchema\Constraints\Constraint;
+use JsonSchema\Validator;
 use stdClass;
+use Storipress\WordPress\Exceptions\BadRequestException;
 use Storipress\WordPress\Exceptions\HttpException;
 use Storipress\WordPress\Exceptions\HttpUnknownError;
 use Storipress\WordPress\Exceptions\NotFoundException;
+use Storipress\WordPress\Exceptions\Rest\CannotCreateRestException;
+use Storipress\WordPress\Exceptions\Rest\CannotUpdateRestException;
+use Storipress\WordPress\Exceptions\Rest\DuplicateTermSlugRestException;
+use Storipress\WordPress\Exceptions\Rest\TermExistsRestException;
+use Storipress\WordPress\Exceptions\Rest\UnknownRestException;
+use Storipress\WordPress\Exceptions\UnauthorizedException;
 use Storipress\WordPress\Exceptions\UnexpectedValueException;
+use Storipress\WordPress\Objects\ErrorException;
 use Storipress\WordPress\WordPress;
 
 abstract class Request
@@ -51,8 +61,15 @@ abstract class Request
             throw new UnexpectedValueException();
         }
 
+        $payload = $response->object();
+
+        if (!($payload instanceof stdClass)) {
+            throw new UnexpectedValueException();
+        }
+
         if (!$response->successful()) {
             $this->error(
+                $payload,
                 $response->body(),
                 $response->status(),
                 $response->headers(),
@@ -87,12 +104,47 @@ abstract class Request
      *
      * @throws HttpException
      */
-    protected function error(string $message, int $code, array $headers): void
+    protected function error(stdClass $payload, string $message, int $status, array $headers): void
     {
-        throw match ($code) {
-            404 => new NotFoundException($message, $code),
+        if ($this->validate($payload)) {
 
-            default => new HttpUnknownError($message, $code),
+            $error = ErrorException::from($payload);
+
+            $error->raw_message = $message;
+
+            throw match ($error->code) {
+                'term_exists' => new TermExistsRestException($error, $status),
+                'duplicate_term_slug' => new DuplicateTermSlugRestException($error, $status),
+                'rest_cannot_create' => new CannotCreateRestException($error, $status),
+                'rest_cannot_update' => new CannotUpdateRestException($error, $status),
+                default => new UnknownRestException($error, $status),
+            };
+        }
+
+        throw match ($status) {
+            401 => new UnauthorizedException($message, $status),
+            403 => new BadRequestException($message, $status),
+            404 => new NotFoundException($message, $status),
+            default => new HttpUnknownError($message, $status),
         };
+    }
+
+    protected function validate(stdClass $data): bool
+    {
+        $file = realpath(
+            sprintf('%s/../Schemas/exception.json', __DIR__),
+        );
+
+        if ($file === false) {
+            return false;
+        }
+
+        $path = sprintf('file://%s', $file);
+
+        $validator = new Validator();
+
+        $validator->validate($data, ['$ref' => $path], Constraint::CHECK_MODE_NORMAL | Constraint::CHECK_MODE_VALIDATE_SCHEMA);
+
+        return $validator->isValid();
     }
 }
