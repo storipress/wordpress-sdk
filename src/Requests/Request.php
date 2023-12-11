@@ -9,14 +9,15 @@ use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
 use stdClass;
 use Storipress\WordPress\Exceptions\BadRequestException;
+use Storipress\WordPress\Exceptions\ForbiddenException;
 use Storipress\WordPress\Exceptions\HttpException;
 use Storipress\WordPress\Exceptions\HttpUnknownError;
 use Storipress\WordPress\Exceptions\NotFoundException;
-use Storipress\WordPress\Exceptions\Rest\CannotCreateRestException;
-use Storipress\WordPress\Exceptions\Rest\CannotUpdateRestException;
-use Storipress\WordPress\Exceptions\Rest\DuplicateTermSlugRestException;
-use Storipress\WordPress\Exceptions\Rest\TermExistsRestException;
-use Storipress\WordPress\Exceptions\Rest\UnknownRestException;
+use Storipress\WordPress\Exceptions\Rest\CannotCreateException;
+use Storipress\WordPress\Exceptions\Rest\CannotUpdateException;
+use Storipress\WordPress\Exceptions\Rest\DuplicateTermSlugException;
+use Storipress\WordPress\Exceptions\Rest\TermExistsException;
+use Storipress\WordPress\Exceptions\Rest\UnknownException;
 use Storipress\WordPress\Exceptions\UnauthorizedException;
 use Storipress\WordPress\Exceptions\UnexpectedValueException;
 use Storipress\WordPress\Objects\ErrorException;
@@ -80,14 +81,7 @@ abstract class Request
             return $response->successful();
         }
 
-        $data = $response->object();
-
-        // @phpstan-ignore-next-line
-        if (!($data instanceof stdClass) && !is_array($data)) {
-            throw new UnexpectedValueException();
-        }
-
-        return $data;
+        return $payload;
     }
 
     public function getUrl(string $path): string
@@ -107,23 +101,21 @@ abstract class Request
     protected function error(stdClass $payload, string $message, int $status, array $headers): void
     {
         if ($this->validate($payload)) {
-
             $error = ErrorException::from($payload);
 
-            $error->raw_message = $message;
-
             throw match ($error->code) {
-                'term_exists' => new TermExistsRestException($error, $status),
-                'duplicate_term_slug' => new DuplicateTermSlugRestException($error, $status),
-                'rest_cannot_create' => new CannotCreateRestException($error, $status),
-                'rest_cannot_update' => new CannotUpdateRestException($error, $status),
-                default => new UnknownRestException($error, $status),
+                'term_exists' => new TermExistsException($error, $status),
+                'duplicate_term_slug' => new DuplicateTermSlugException($error, $status),
+                'rest_cannot_create' => new CannotCreateException($error, $status),
+                'rest_cannot_update' => new CannotUpdateException($error, $status),
+                default => new UnknownException($error, $status),
             };
         }
 
         throw match ($status) {
+            400 => new BadRequestException($message, $status),
             401 => new UnauthorizedException($message, $status),
-            403 => new BadRequestException($message, $status),
+            403 => new ForbiddenException($message, $status),
             404 => new NotFoundException($message, $status),
             default => new HttpUnknownError($message, $status),
         };

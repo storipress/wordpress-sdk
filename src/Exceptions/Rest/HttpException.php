@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Storipress\WordPress\Exceptions\Rest;
 
-use Storipress\WordPress\Exceptions\HttpException;
+use Storipress\WordPress\Exceptions\HttpException as BaseHttpException;
 use Storipress\WordPress\Objects\ErrorException;
 use Throwable;
 
-abstract class RestHttpException extends HttpException
+abstract class HttpException extends BaseHttpException
 {
     public string $raw_message;
 

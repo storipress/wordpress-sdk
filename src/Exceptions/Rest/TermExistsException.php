@@ -7,16 +7,16 @@ namespace Storipress\WordPress\Exceptions\Rest;
 use Storipress\WordPress\Objects\ErrorException;
 use Throwable;
 
-class TermExistsRestException extends RestHttpException
+class TermExistsException extends HttpException
 {
     /**
      * Duplicate term id
      */
-    public mixed $term_id;
+    public ?int $term_id;
 
     public function __construct(ErrorException $error, int $code = 0, ?Throwable $previous = null)
     {
-        $this->term_id = data_get($error->data, 'term_id');
+        $this->term_id = $error->data['term_id'] ?? null;
 
         parent::__construct($error, $code, $previous);
     }
