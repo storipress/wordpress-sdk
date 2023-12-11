@@ -47,8 +47,12 @@ abstract class Request
 
         $response = $http->{$method}($this->getUrl($path), $options);
 
-        if (!($response instanceof Response)) {
-            throw new UnexpectedValueException();
+        if (!($response instanceof Response) || $response->json() === null) {
+            $response = $http->{$method}($this->getNonPrettyUrl($path), $options);
+
+            if ((!($response instanceof Response) || $response->json() === null)) {
+                throw new UnexpectedValueException();
+            }
         }
 
         if (!$response->successful()) {
@@ -76,6 +80,15 @@ abstract class Request
     public function getUrl(string $path): string
     {
         return sprintf('%s/wp-json/wp/%s/%s',
+            rtrim($this->app->site(), '/'),
+            self::VERSION,
+            ltrim($path, '/')
+        );
+    }
+
+    public function getNonPrettyUrl(string $path): string
+    {
+        return sprintf('%s?rest_route=/wp/%s/%s',
             rtrim($this->app->site(), '/'),
             self::VERSION,
             ltrim($path, '/')
