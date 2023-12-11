@@ -64,7 +64,8 @@ abstract class Request
 
         $payload = $response->object();
 
-        if (!($payload instanceof stdClass)) {
+        // @phpstan-ignore-next-line
+        if (!($payload instanceof stdClass) && !is_array($payload)) {
             throw new UnexpectedValueException();
         }
 
