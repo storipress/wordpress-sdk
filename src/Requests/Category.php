@@ -26,7 +26,7 @@ class Category extends Request
 
         return array_map(
             fn ($data) => CategoryObject::from($data),
-            $data
+            $data,
         );
     }
 

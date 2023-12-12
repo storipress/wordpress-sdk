@@ -54,7 +54,14 @@ abstract class Request
             $http->withUserAgent($this->app->userAgent());
         }
 
-        $response = $http->{$method}($this->getUrl($path), $options);
+        $response = $http->{$method}(
+            $this->getUrl(
+                $path,
+                $this->app->prefix(),
+                $this->app->isPrettyUrl(),
+            ),
+            $options,
+        );
 
         if (!($response instanceof Response)) {
             throw $this->unexpectedValueException();
@@ -82,12 +89,23 @@ abstract class Request
         return $payload;
     }
 
-    public function getUrl(string $path): string
+    public function getUrl(string $path, string $prefix, bool $pretty): string
     {
-        return sprintf('%s/wp-json/wp/%s/%s',
+        if ($pretty) {
+            return sprintf(
+                '%s/%s/wp/%s/%s',
+                rtrim($this->app->site(), '/'),
+                $prefix,
+                self::VERSION,
+                ltrim($path, '/'),
+            );
+        }
+
+        return sprintf(
+            '%s?rest_route=/wp/%s/%s',
             rtrim($this->app->site(), '/'),
             self::VERSION,
-            ltrim($path, '/')
+            ltrim($path, '/'),
         );
     }
 
