@@ -12,7 +12,5 @@ class ErrorException extends WordPressObject
 
     public string $message;
 
-    public string $raw_message;
-
     public stdClass $data;
 }

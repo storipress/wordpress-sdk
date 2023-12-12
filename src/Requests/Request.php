@@ -9,17 +9,16 @@ use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
 use stdClass;
 use Storipress\WordPress\Exceptions\BadRequestException;
+use Storipress\WordPress\Exceptions\CannotCreateException;
+use Storipress\WordPress\Exceptions\CannotUpdateException;
+use Storipress\WordPress\Exceptions\DuplicateTermSlugException;
 use Storipress\WordPress\Exceptions\ForbiddenException;
-use Storipress\WordPress\Exceptions\HttpException;
-use Storipress\WordPress\Exceptions\HttpUnknownError;
 use Storipress\WordPress\Exceptions\NotFoundException;
-use Storipress\WordPress\Exceptions\Rest\CannotCreateException;
-use Storipress\WordPress\Exceptions\Rest\CannotUpdateException;
-use Storipress\WordPress\Exceptions\Rest\DuplicateTermSlugException;
-use Storipress\WordPress\Exceptions\Rest\TermExistsException;
-use Storipress\WordPress\Exceptions\Rest\UnknownException;
+use Storipress\WordPress\Exceptions\TermExistsException;
 use Storipress\WordPress\Exceptions\UnauthorizedException;
 use Storipress\WordPress\Exceptions\UnexpectedValueException;
+use Storipress\WordPress\Exceptions\UnknownException;
+use Storipress\WordPress\Exceptions\WordPressException;
 use Storipress\WordPress\Objects\ErrorException;
 use Storipress\WordPress\WordPress;
 
@@ -39,8 +38,7 @@ abstract class Request
      * @param  array<mixed>  $options
      * @return ($method is 'delete' ? bool : stdClass|array<int, stdClass>)
      *
-     * @throws UnexpectedValueException
-     * @throws HttpException
+     * @throws UnexpectedValueException|WordPressException
      */
     protected function request(
         string $method,
@@ -59,14 +57,14 @@ abstract class Request
         $response = $http->{$method}($this->getUrl($path), $options);
 
         if (!($response instanceof Response)) {
-            throw new UnexpectedValueException();
+            throw $this->unexpectedValueException('Unexpected response value.');
         }
 
         $payload = $response->object();
 
         // @phpstan-ignore-next-line
         if (!($payload instanceof stdClass) && !is_array($payload)) {
-            throw new UnexpectedValueException();
+            throw $this->unexpectedValueException('Unexpected response format.');
         }
 
         if (!$response->successful()) {
@@ -74,7 +72,6 @@ abstract class Request
                 $payload,
                 $response->body(),
                 $response->status(),
-                $response->headers(),
             );
         }
 
@@ -95,11 +92,9 @@ abstract class Request
     }
 
     /**
-     * @param  array<string, array<int, string>>  $headers
-     *
-     * @throws HttpException
+     * @throws WordPressException
      */
-    protected function error(stdClass $payload, string $message, int $status, array $headers): void
+    protected function error(stdClass $payload, string $message, int $status): void
     {
         if ($this->validate($payload)) {
             $error = ErrorException::from($payload);
@@ -113,12 +108,18 @@ abstract class Request
             };
         }
 
+        $error = ErrorException::from((object) [
+            'code' => (string) $status,
+            'message' => $message,
+            'data' => (object) [],
+        ]);
+
         throw match ($status) {
-            400 => new BadRequestException($message, $status),
-            401 => new UnauthorizedException($message, $status),
-            403 => new ForbiddenException($message, $status),
-            404 => new NotFoundException($message, $status),
-            default => new HttpUnknownError($message, $status),
+            400 => new BadRequestException($error),
+            401 => new UnauthorizedException($error),
+            403 => new ForbiddenException($error),
+            404 => new NotFoundException($error),
+            default => new UnknownException($error, $status),
         };
     }
 
@@ -139,5 +140,14 @@ abstract class Request
         $validator->validate($data, ['$ref' => $path], Constraint::CHECK_MODE_NORMAL | Constraint::CHECK_MODE_VALIDATE_SCHEMA);
 
         return $validator->isValid();
+    }
+
+    protected function unexpectedValueException(string $message): UnexpectedValueException
+    {
+        return new UnexpectedValueException(ErrorException::from((object) [
+            'message' => $message,
+            'code' => '500',
+            'data' => (object) [],
+        ]));
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Storipress\WordPress\Requests;
 
 use stdClass;
+use Storipress\WordPress\Exceptions\WordPressException;
 
 class GeneralRequest extends Request
 {
@@ -13,8 +14,7 @@ class GeneralRequest extends Request
      * @param  array<mixed>  $arguments
      * @return stdClass|array<int, stdClass>
      *
-     * @throws \Storipress\WordPress\Exceptions\HttpException
-     * @throws \Storipress\WordPress\Exceptions\UnexpectedValueException
+     * @throws WordPressException
      */
     public function get(string $path, array $arguments): stdClass|array
     {
@@ -26,8 +26,7 @@ class GeneralRequest extends Request
      * @param  array<mixed>  $arguments
      * @return stdClass|array<int, stdClass>
      *
-     * @throws \Storipress\WordPress\Exceptions\HttpException
-     * @throws \Storipress\WordPress\Exceptions\UnexpectedValueException
+     * @throws WordPressException
      */
     public function post(string $path, array $arguments): stdClass|array
     {
@@ -39,8 +38,7 @@ class GeneralRequest extends Request
      * @param  array<mixed>  $arguments
      * @return stdClass|array<int, stdClass>
      *
-     * @throws \Storipress\WordPress\Exceptions\HttpException
-     * @throws \Storipress\WordPress\Exceptions\UnexpectedValueException
+     * @throws WordPressException
      */
     public function patch(string $path, array $arguments): stdClass|array
     {
@@ -51,8 +49,7 @@ class GeneralRequest extends Request
      * @param  non-empty-string  $path
      * @param  array<mixed>  $arguments
      *
-     * @throws \Storipress\WordPress\Exceptions\HttpException
-     * @throws \Storipress\WordPress\Exceptions\UnexpectedValueException
+     * @throws WordPressException
      */
     public function delete(string $path, array $arguments): bool
     {
