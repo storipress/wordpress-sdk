@@ -45,7 +45,11 @@ abstract class Request
         }
 
         $response = $http->{$method}(
-            $this->getUrl($path, $this->app->basePath(), $this->app->isPrettyUrl()),
+            $this->getUrl(
+                $path,
+                $this->app->prefix(),
+                $this->app->isPrettyUrl()
+            ),
             $options
         );
 
@@ -73,7 +77,8 @@ abstract class Request
     public function getUrl(string $path, string $basePath, bool $pretty): string
     {
         if ($pretty) {
-            return sprintf('%s/%s/wp/%s/%s',
+            return sprintf(
+                '%s/%s/wp/%s/%s',
                 rtrim($this->app->site(), '/'),
                 $basePath,
                 self::VERSION,
@@ -81,7 +86,8 @@ abstract class Request
             );
         }
 
-        return sprintf('%s?rest_route=/wp/%s/%s',
+        return sprintf(
+            '%s?rest_route=/wp/%s/%s',
             rtrim($this->app->site(), '/'),
             self::VERSION,
             ltrim($path, '/')

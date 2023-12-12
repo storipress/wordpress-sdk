@@ -31,9 +31,9 @@ class WordPress
 
     protected ?string $userAgent = null;
 
-    protected string $basePath = 'wp-json';
+    protected string $prefix = 'wp-json';
 
-    protected bool $prettyUrl = true;
+    protected bool $prettyUrl = false;
 
     public function __construct(
         public Factory $http,
@@ -95,14 +95,14 @@ class WordPress
         return $this->userAgent;
     }
 
-    public function basePath(): string
+    public function prefix(): string
     {
-        return $this->basePath;
+        return $this->prefix;
     }
 
-    public function setBasePath(string $basePath): static
+    public function setPrefix(string $prefix): static
     {
-        $this->basePath = $basePath;
+        $this->prefix = $prefix;
 
         return $this;
     }
@@ -112,9 +112,9 @@ class WordPress
         return $this->prettyUrl;
     }
 
-    public function nonPrettyUrl(): static
+    public function prettyUrl(): static
     {
-        $this->prettyUrl = false;
+        $this->prettyUrl = true;
 
         return $this;
     }

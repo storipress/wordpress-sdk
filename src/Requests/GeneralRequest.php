@@ -62,14 +62,16 @@ class GeneralRequest extends Request
     public function getUrl(string $path, string $basePath, bool $pretty): string
     {
         if ($pretty) {
-            return sprintf('%s/%s/%s',
+            return sprintf(
+                '%s/%s/%s',
                 rtrim($this->app->site(), '/'),
                 $basePath,
                 ltrim($path, '/')
             );
         }
 
-        return sprintf('%s?rest_route=%s',
+        return sprintf(
+            '%s?rest_route=/%s',
             rtrim($this->app->site(), '/'),
             ltrim($path, '/')
         );
