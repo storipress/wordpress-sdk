@@ -28,7 +28,7 @@ class Tag extends Request
 
         return array_map(
             fn ($data) => TagObject::from($data),
-            $data
+            $data,
         );
     }
 

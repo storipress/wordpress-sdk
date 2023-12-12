@@ -31,6 +31,10 @@ class WordPress
 
     protected ?string $userAgent = null;
 
+    protected string $prefix = 'wp-json';
+
+    protected bool $prettyUrl = false;
+
     public function __construct(
         public Factory $http,
     ) {
@@ -89,6 +93,30 @@ class WordPress
     public function userAgent(): ?string
     {
         return $this->userAgent;
+    }
+
+    public function prefix(): string
+    {
+        return $this->prefix;
+    }
+
+    public function setPrefix(string $prefix): static
+    {
+        $this->prefix = $prefix;
+
+        return $this;
+    }
+
+    public function isPrettyUrl(): bool
+    {
+        return $this->prettyUrl;
+    }
+
+    public function prettyUrl(): static
+    {
+        $this->prettyUrl = true;
+
+        return $this;
     }
 
     public function withUserAgent(string $userAgent): static

@@ -28,7 +28,7 @@ class User extends Request
 
         return array_map(
             fn ($data) => UserObject::from($data),
-            $data
+            $data,
         );
     }
 

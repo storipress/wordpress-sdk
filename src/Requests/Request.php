@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Storipress\WordPress\Requests;
 
-use Illuminate\Http\Client\Response;
 use stdClass;
 use Storipress\WordPress\Exceptions\HttpException;
 use Storipress\WordPress\Exceptions\HttpUnknownError;
@@ -45,11 +44,14 @@ abstract class Request
             $http->withUserAgent($this->app->userAgent());
         }
 
-        $response = $http->{$method}($this->getUrl($path), $options);
-
-        if (!($response instanceof Response)) {
-            throw new UnexpectedValueException();
-        }
+        $response = $http->{$method}(
+            $this->getUrl(
+                $path,
+                $this->app->prefix(),
+                $this->app->isPrettyUrl(),
+            ),
+            $options,
+        );
 
         if (!$response->successful()) {
             $this->error(
@@ -65,7 +67,6 @@ abstract class Request
 
         $data = $response->object();
 
-        // @phpstan-ignore-next-line
         if (!($data instanceof stdClass) && !is_array($data)) {
             throw new UnexpectedValueException();
         }
@@ -73,12 +74,23 @@ abstract class Request
         return $data;
     }
 
-    public function getUrl(string $path): string
+    public function getUrl(string $path, string $prefix, bool $pretty): string
     {
-        return sprintf('%s/wp-json/wp/%s/%s',
+        if ($pretty) {
+            return sprintf(
+                '%s/%s/wp/%s/%s',
+                rtrim($this->app->site(), '/'),
+                $prefix,
+                self::VERSION,
+                ltrim($path, '/'),
+            );
+        }
+
+        return sprintf(
+            '%s?rest_route=/wp/%s/%s',
             rtrim($this->app->site(), '/'),
             self::VERSION,
-            ltrim($path, '/')
+            ltrim($path, '/'),
         );
     }
 
