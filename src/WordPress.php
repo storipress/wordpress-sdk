@@ -31,6 +31,10 @@ class WordPress
 
     protected ?string $userAgent = null;
 
+    protected string $basePath = 'wp-json';
+
+    protected bool $prettyUrl = true;
+
     public function __construct(
         public Factory $http,
     ) {
@@ -89,6 +93,30 @@ class WordPress
     public function userAgent(): ?string
     {
         return $this->userAgent;
+    }
+
+    public function basePath(): string
+    {
+        return $this->basePath;
+    }
+
+    public function setBasePath(string $basePath): static
+    {
+        $this->basePath = $basePath;
+
+        return $this;
+    }
+
+    public function isPrettyUrl(): bool
+    {
+        return $this->prettyUrl;
+    }
+
+    public function nonPrettyUrl(): static
+    {
+        $this->prettyUrl = false;
+
+        return $this;
     }
 
     public function withUserAgent(string $userAgent): static

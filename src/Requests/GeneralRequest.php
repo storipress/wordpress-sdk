@@ -59,9 +59,17 @@ class GeneralRequest extends Request
         return $this->request('delete', $path, $arguments);
     }
 
-    public function getUrl(string $path): string
+    public function getUrl(string $path, string $basePath, bool $pretty): string
     {
-        return sprintf('%s/wp-json/%s',
+        if ($pretty) {
+            return sprintf('%s/%s/%s',
+                rtrim($this->app->site(), '/'),
+                $basePath,
+                ltrim($path, '/')
+            );
+        }
+
+        return sprintf('%s?rest_route=%s',
             rtrim($this->app->site(), '/'),
             ltrim($path, '/')
         );

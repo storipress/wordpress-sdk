@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Storipress\WordPress\Requests;
 
-use Illuminate\Http\Client\Response;
 use stdClass;
 use Storipress\WordPress\Exceptions\HttpException;
 use Storipress\WordPress\Exceptions\HttpUnknownError;
@@ -45,15 +44,10 @@ abstract class Request
             $http->withUserAgent($this->app->userAgent());
         }
 
-        $response = $http->{$method}($this->getUrl($path), $options);
-
-        if (!($response instanceof Response) || $response->json() === null) {
-            $response = $http->{$method}($this->getNonPrettyUrl($path), $options);
-
-            if ((!($response instanceof Response) || $response->json() === null)) {
-                throw new UnexpectedValueException();
-            }
-        }
+        $response = $http->{$method}(
+            $this->getUrl($path, $this->app->basePath(), $this->app->isPrettyUrl()),
+            $options
+        );
 
         if (!$response->successful()) {
             $this->error(
@@ -69,7 +63,6 @@ abstract class Request
 
         $data = $response->object();
 
-        // @phpstan-ignore-next-line
         if (!($data instanceof stdClass) && !is_array($data)) {
             throw new UnexpectedValueException();
         }
@@ -77,17 +70,17 @@ abstract class Request
         return $data;
     }
 
-    public function getUrl(string $path): string
+    public function getUrl(string $path, string $basePath, bool $pretty): string
     {
-        return sprintf('%s/wp-json/wp/%s/%s',
-            rtrim($this->app->site(), '/'),
-            self::VERSION,
-            ltrim($path, '/')
-        );
-    }
+        if ($pretty) {
+            return sprintf('%s/%s/wp/%s/%s',
+                rtrim($this->app->site(), '/'),
+                $basePath,
+                self::VERSION,
+                ltrim($path, '/')
+            );
+        }
 
-    public function getNonPrettyUrl(string $path): string
-    {
         return sprintf('%s?rest_route=/wp/%s/%s',
             rtrim($this->app->site(), '/'),
             self::VERSION,

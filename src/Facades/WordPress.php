@@ -26,6 +26,10 @@ use Storipress\WordPress\Requests\User;
  * @method static \Storipress\WordPress\WordPress setPassword(string $password)
  * @method static \Storipress\WordPress\WordPress userAgent()
  * @method static \Storipress\WordPress\WordPress withUserAgent(string $userAgent)
+ * @method static \Storipress\WordPress\WordPress basePath()
+ * @method static \Storipress\WordPress\WordPress setBasePath(string $basePath)
+ * @method static \Storipress\WordPress\WordPress nonPrettyUrl()
+ * @method static \Storipress\WordPress\WordPress isPrettyUrl()
  */
 class WordPress extends Facade
 {
