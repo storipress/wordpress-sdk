@@ -27,7 +27,7 @@ use Storipress\WordPress\Requests\User;
  * @method static \Storipress\WordPress\WordPress userAgent()
  * @method static \Storipress\WordPress\WordPress withUserAgent(string $userAgent)
  * @method static \Storipress\WordPress\WordPress prefix()
- * @method static \Storipress\WordPress\WordPress setPrefix(string $basePath)
+ * @method static \Storipress\WordPress\WordPress setPrefix(string $prefix)
  * @method static \Storipress\WordPress\WordPress prettyUrl()
  * @method static \Storipress\WordPress\WordPress isPrettyUrl()
  */
