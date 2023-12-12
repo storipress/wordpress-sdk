@@ -12,5 +12,5 @@ class WordPressError extends WordPressObject
 
     public string $message;
 
-    public stdClass $data;
+    public ?stdClass $data;
 }
