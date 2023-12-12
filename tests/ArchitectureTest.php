@@ -1,6 +1,6 @@
 <?php
 
-use Storipress\WordPress\Exceptions\Exception;
+use Storipress\WordPress\Exceptions\WordPressException;
 use Storipress\WordPress\Objects\WordPressObject;
 use Storipress\WordPress\Requests\Request;
 
@@ -31,4 +31,4 @@ test('All Object classes should extend "WordPressObject".')
 test('All Exception classes should extend "Exception".')
     ->expect('Storipress\WordPress\Exceptions')
     ->classes()
-    ->toExtend(Exception::class);
+    ->toExtend(WordPressException::class);

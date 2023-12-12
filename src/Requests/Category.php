@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Storipress\WordPress\Requests;
 
-use Storipress\WordPress\Exceptions\HttpException;
-use Storipress\WordPress\Exceptions\UnexpectedValueException;
+use Storipress\WordPress\Exceptions\WordPressException;
 use Storipress\WordPress\Objects\Category as CategoryObject;
 
 class Category extends Request
@@ -15,15 +14,14 @@ class Category extends Request
      *
      * @return array<int, CategoryObject>
      *
-     * @throws HttpException
-     * @throws UnexpectedValueException
+     * @throws WordPressException
      */
     public function list(): array
     {
         $data = $this->request('get', '/categories');
 
         if (!is_array($data)) {
-            throw new UnexpectedValueException();
+            throw $this->unexpectedValueException();
         }
 
         return array_map(
@@ -37,15 +35,14 @@ class Category extends Request
      *
      * @param  array<string, mixed>  $arguments
      *
-     * @throws HttpException
-     * @throws UnexpectedValueException
+     * @throws WordPressException
      */
     public function create(array $arguments): CategoryObject
     {
         $data = $this->request('post', '/categories', $arguments);
 
         if (is_array($data)) {
-            throw new UnexpectedValueException();
+            throw $this->unexpectedValueException();
         }
 
         return CategoryObject::from($data);
@@ -54,8 +51,7 @@ class Category extends Request
     /**
      * https://developer.wordpress.org/rest-api/reference/categories/#retrieve-a-category
      *
-     * @throws HttpException
-     * @throws UnexpectedValueException
+     * @throws WordPressException
      */
     public function retrieve(int $categoryId, string $context = 'view'): CategoryObject
     {
@@ -66,7 +62,7 @@ class Category extends Request
         ]);
 
         if (is_array($data)) {
-            throw new UnexpectedValueException();
+            throw $this->unexpectedValueException();
         }
 
         return CategoryObject::from($data);
@@ -77,8 +73,7 @@ class Category extends Request
      *
      * @param  array<string, mixed>  $arguments
      *
-     * @throws HttpException
-     * @throws UnexpectedValueException
+     * @throws WordPressException
      */
     public function update(int $categoryId, array $arguments): CategoryObject
     {
@@ -87,7 +82,7 @@ class Category extends Request
         $data = $this->request('patch', $uri, $arguments);
 
         if (is_array($data)) {
-            throw new UnexpectedValueException();
+            throw $this->unexpectedValueException();
         }
 
         return CategoryObject::from($data);
@@ -96,8 +91,7 @@ class Category extends Request
     /**
      * https://developer.wordpress.org/rest-api/reference/categories/#delete-a-category
      *
-     * @throws HttpException
-     * @throws UnexpectedValueException
+     * @throws WordPressException
      */
     public function delete(int $categoryId): bool
     {

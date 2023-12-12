@@ -4,11 +4,22 @@ declare(strict_types=1);
 
 namespace Storipress\WordPress\Requests;
 
+use Illuminate\Http\Client\Response;
+use JsonSchema\Constraints\Constraint;
+use JsonSchema\Validator;
 use stdClass;
-use Storipress\WordPress\Exceptions\HttpException;
-use Storipress\WordPress\Exceptions\HttpUnknownError;
+use Storipress\WordPress\Exceptions\BadRequestException;
+use Storipress\WordPress\Exceptions\CannotCreateException;
+use Storipress\WordPress\Exceptions\CannotUpdateException;
+use Storipress\WordPress\Exceptions\DuplicateTermSlugException;
+use Storipress\WordPress\Exceptions\ForbiddenException;
 use Storipress\WordPress\Exceptions\NotFoundException;
+use Storipress\WordPress\Exceptions\TermExistsException;
+use Storipress\WordPress\Exceptions\UnauthorizedException;
 use Storipress\WordPress\Exceptions\UnexpectedValueException;
+use Storipress\WordPress\Exceptions\UnknownException;
+use Storipress\WordPress\Exceptions\WordPressException;
+use Storipress\WordPress\Objects\WordPressError;
 use Storipress\WordPress\WordPress;
 
 abstract class Request
@@ -27,8 +38,7 @@ abstract class Request
      * @param  array<mixed>  $options
      * @return ($method is 'delete' ? bool : stdClass|array<int, stdClass>)
      *
-     * @throws UnexpectedValueException
-     * @throws HttpException
+     * @throws UnexpectedValueException|WordPressException
      */
     protected function request(
         string $method,
@@ -53,11 +63,22 @@ abstract class Request
             $options,
         );
 
+        if (!($response instanceof Response)) {
+            throw $this->unexpectedValueException();
+        }
+
+        $payload = $response->object();
+
+        // @phpstan-ignore-next-line
+        if (!($payload instanceof stdClass) && !is_array($payload)) {
+            throw $this->unexpectedValueException();
+        }
+
         if (!$response->successful()) {
             $this->error(
+                $payload,
                 $response->body(),
                 $response->status(),
-                $response->headers(),
             );
         }
 
@@ -65,13 +86,7 @@ abstract class Request
             return $response->successful();
         }
 
-        $data = $response->object();
-
-        if (!($data instanceof stdClass) && !is_array($data)) {
-            throw new UnexpectedValueException();
-        }
-
-        return $data;
+        return $payload;
     }
 
     public function getUrl(string $path, string $prefix, bool $pretty): string
@@ -95,16 +110,62 @@ abstract class Request
     }
 
     /**
-     * @param  array<string, array<int, string>>  $headers
-     *
-     * @throws HttpException
+     * @throws WordPressException
      */
-    protected function error(string $message, int $code, array $headers): void
+    protected function error(stdClass $payload, string $message, int $status): void
     {
-        throw match ($code) {
-            404 => new NotFoundException($message, $code),
+        if ($this->validate($payload)) {
+            $error = WordPressError::from($payload);
 
-            default => new HttpUnknownError($message, $code),
+            throw match ($error->code) {
+                'term_exists' => new TermExistsException($error, $status),
+                'duplicate_term_slug' => new DuplicateTermSlugException($error, $status),
+                'rest_cannot_create' => new CannotCreateException($error, $status),
+                'rest_cannot_update' => new CannotUpdateException($error, $status),
+                default => new UnknownException($error, $status),
+            };
+        }
+
+        $error = WordPressError::from((object) [
+            'code' => (string) $status,
+            'message' => $message,
+            'data' => (object) [],
+        ]);
+
+        throw match ($status) {
+            400 => new BadRequestException($error),
+            401 => new UnauthorizedException($error),
+            403 => new ForbiddenException($error),
+            404 => new NotFoundException($error),
+            default => new UnknownException($error, $status),
         };
+    }
+
+    protected function validate(stdClass $data): bool
+    {
+        $file = realpath(
+            sprintf('%s/../Schemas/exception.json', __DIR__),
+        );
+
+        if ($file === false) {
+            return false;
+        }
+
+        $path = sprintf('file://%s', $file);
+
+        $validator = new Validator();
+
+        $validator->validate($data, ['$ref' => $path], Constraint::CHECK_MODE_NORMAL | Constraint::CHECK_MODE_VALIDATE_SCHEMA);
+
+        return $validator->isValid();
+    }
+
+    protected function unexpectedValueException(): UnexpectedValueException
+    {
+        return new UnexpectedValueException(WordPressError::from((object) [
+            'message' => 'Unexpected value.',
+            'code' => '500',
+            'data' => (object) [],
+        ]));
     }
 }

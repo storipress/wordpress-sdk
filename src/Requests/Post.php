@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Storipress\WordPress\Requests;
 
-use Storipress\WordPress\Exceptions\HttpException;
-use Storipress\WordPress\Exceptions\UnexpectedValueException;
+use Storipress\WordPress\Exceptions\WordPressException;
 use Storipress\WordPress\Objects\Post as PostObject;
 
 class Post extends Request
@@ -15,15 +14,14 @@ class Post extends Request
      *
      * @return array<int, PostObject>
      *
-     * @throws HttpException
-     * @throws UnexpectedValueException
+     * @throws WordPressException
      */
     public function list(): array
     {
         $data = $this->request('get', '/posts');
 
         if (!is_array($data)) {
-            throw new UnexpectedValueException();
+            throw $this->unexpectedValueException();
         }
 
         return array_map(
@@ -37,15 +35,14 @@ class Post extends Request
      *
      * @param  array<string, mixed>  $arguments
      *
-     * @throws HttpException
-     * @throws UnexpectedValueException
+     * @throws WordPressException
      */
     public function create(array $arguments): PostObject
     {
         $data = $this->request('post', '/posts', $arguments);
 
         if (is_array($data)) {
-            throw new UnexpectedValueException();
+            throw $this->unexpectedValueException();
         }
 
         return PostObject::from($data);
@@ -54,8 +51,7 @@ class Post extends Request
     /**
      * https://developer.wordpress.org/rest-api/reference/posts/#retrieve-a-post
      *
-     * @throws HttpException
-     * @throws UnexpectedValueException
+     * @throws WordPressException
      */
     public function retrieve(int $postId, string $context = 'view'): PostObject
     {
@@ -66,7 +62,7 @@ class Post extends Request
         ]);
 
         if (is_array($data)) {
-            throw new UnexpectedValueException();
+            throw $this->unexpectedValueException();
         }
 
         return PostObject::from($data);
@@ -77,8 +73,7 @@ class Post extends Request
      *
      * @param  array<string, mixed>  $arguments
      *
-     * @throws HttpException
-     * @throws UnexpectedValueException
+     * @throws WordPressException
      */
     public function update(int $postId, array $arguments): PostObject
     {
@@ -87,7 +82,7 @@ class Post extends Request
         $data = $this->request('patch', $uri, $arguments);
 
         if (is_array($data)) {
-            throw new UnexpectedValueException();
+            throw $this->unexpectedValueException();
         }
 
         return PostObject::from($data);
@@ -96,8 +91,7 @@ class Post extends Request
     /**
      * https://developer.wordpress.org/rest-api/reference/posts/#delete-a-post
      *
-     * @throws HttpException
-     * @throws UnexpectedValueException
+     * @throws WordPressException
      */
     public function delete(int $postId, bool $force = false): bool
     {

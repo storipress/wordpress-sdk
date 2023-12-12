@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Storipress\WordPress\Requests;
 
-use Storipress\WordPress\Exceptions\HttpException;
-use Storipress\WordPress\Exceptions\UnexpectedValueException;
+use Storipress\WordPress\Exceptions\WordPressException;
 use Storipress\WordPress\Objects\User as UserObject;
 
 class User extends Request
@@ -15,15 +14,14 @@ class User extends Request
      *
      * @return array<int, UserObject>
      *
-     * @throws HttpException
-     * @throws UnexpectedValueException
+     * @throws WordPressException
      */
     public function list(): array
     {
         $data = $this->request('get', '/users');
 
         if (!is_array($data)) {
-            throw new UnexpectedValueException();
+            throw $this->unexpectedValueException();
         }
 
         return array_map(
@@ -37,15 +35,14 @@ class User extends Request
      *
      * @param  array<string, mixed>  $arguments
      *
-     * @throws HttpException
-     * @throws UnexpectedValueException
+     * @throws WordPressException
      */
     public function create(array $arguments): UserObject
     {
         $data = $this->request('post', '/users', $arguments);
 
         if (is_array($data)) {
-            throw new UnexpectedValueException();
+            throw $this->unexpectedValueException();
         }
 
         return UserObject::from($data);
@@ -54,8 +51,7 @@ class User extends Request
     /**
      * https://developer.wordpress.org/rest-api/reference/users/#retrieve-a-user
      *
-     * @throws HttpException
-     * @throws UnexpectedValueException
+     * @throws WordPressException
      */
     public function retrieve(int $userId, string $context = 'view'): UserObject
     {
@@ -66,7 +62,7 @@ class User extends Request
         ]);
 
         if (is_array($data)) {
-            throw new UnexpectedValueException();
+            throw $this->unexpectedValueException();
         }
 
         return UserObject::from($data);
@@ -77,8 +73,7 @@ class User extends Request
      *
      * @param  array<string, mixed>  $arguments
      *
-     * @throws HttpException
-     * @throws UnexpectedValueException
+     * @throws WordPressException
      */
     public function update(int $userId, array $arguments): UserObject
     {
@@ -87,7 +82,7 @@ class User extends Request
         $data = $this->request('patch', $uri, $arguments);
 
         if (is_array($data)) {
-            throw new UnexpectedValueException();
+            throw $this->unexpectedValueException();
         }
 
         return UserObject::from($data);
@@ -96,8 +91,7 @@ class User extends Request
     /**
      * https://developer.wordpress.org/rest-api/reference/users/#delete-a-user
      *
-     * @throws HttpException
-     * @throws UnexpectedValueException
+     * @throws WordPressException
      */
     public function delete(int $userId, int $reassign): bool
     {
