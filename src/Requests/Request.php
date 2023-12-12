@@ -48,9 +48,9 @@ abstract class Request
             $this->getUrl(
                 $path,
                 $this->app->prefix(),
-                $this->app->isPrettyUrl()
+                $this->app->isPrettyUrl(),
             ),
-            $options
+            $options,
         );
 
         if (!$response->successful()) {
@@ -74,15 +74,15 @@ abstract class Request
         return $data;
     }
 
-    public function getUrl(string $path, string $basePath, bool $pretty): string
+    public function getUrl(string $path, string $prefix, bool $pretty): string
     {
         if ($pretty) {
             return sprintf(
                 '%s/%s/wp/%s/%s',
                 rtrim($this->app->site(), '/'),
-                $basePath,
+                $prefix,
                 self::VERSION,
-                ltrim($path, '/')
+                ltrim($path, '/'),
             );
         }
 
@@ -90,7 +90,7 @@ abstract class Request
             '%s?rest_route=/wp/%s/%s',
             rtrim($this->app->site(), '/'),
             self::VERSION,
-            ltrim($path, '/')
+            ltrim($path, '/'),
         );
     }
 

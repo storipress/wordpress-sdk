@@ -59,21 +59,21 @@ class GeneralRequest extends Request
         return $this->request('delete', $path, $arguments);
     }
 
-    public function getUrl(string $path, string $basePath, bool $pretty): string
+    public function getUrl(string $path, string $prefix, bool $pretty): string
     {
         if ($pretty) {
             return sprintf(
                 '%s/%s/%s',
                 rtrim($this->app->site(), '/'),
-                $basePath,
-                ltrim($path, '/')
+                $prefix,
+                ltrim($path, '/'),
             );
         }
 
         return sprintf(
             '%s?rest_route=/%s',
             rtrim($this->app->site(), '/'),
-            ltrim($path, '/')
+            ltrim($path, '/'),
         );
     }
 }
