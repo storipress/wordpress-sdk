@@ -21,7 +21,7 @@ class Category extends Request
         $data = $this->request('get', '/categories');
 
         if (!is_array($data)) {
-            throw $this->unexpectedValueException('Unexpected response format.');
+            throw $this->unexpectedValueException();
         }
 
         return array_map(
@@ -42,7 +42,7 @@ class Category extends Request
         $data = $this->request('post', '/categories', $arguments);
 
         if (is_array($data)) {
-            throw $this->unexpectedValueException('Unexpected response format.');
+            throw $this->unexpectedValueException();
         }
 
         return CategoryObject::from($data);
@@ -62,7 +62,7 @@ class Category extends Request
         ]);
 
         if (is_array($data)) {
-            throw $this->unexpectedValueException('Unexpected response format.');
+            throw $this->unexpectedValueException();
         }
 
         return CategoryObject::from($data);
@@ -82,7 +82,7 @@ class Category extends Request
         $data = $this->request('patch', $uri, $arguments);
 
         if (is_array($data)) {
-            throw $this->unexpectedValueException('Unexpected response format.');
+            throw $this->unexpectedValueException();
         }
 
         return CategoryObject::from($data);

@@ -19,7 +19,7 @@ use Storipress\WordPress\Exceptions\UnauthorizedException;
 use Storipress\WordPress\Exceptions\UnexpectedValueException;
 use Storipress\WordPress\Exceptions\UnknownException;
 use Storipress\WordPress\Exceptions\WordPressException;
-use Storipress\WordPress\Objects\ErrorException;
+use Storipress\WordPress\Objects\WordPressError;
 use Storipress\WordPress\WordPress;
 
 abstract class Request
@@ -57,14 +57,14 @@ abstract class Request
         $response = $http->{$method}($this->getUrl($path), $options);
 
         if (!($response instanceof Response)) {
-            throw $this->unexpectedValueException('Unexpected response value.');
+            throw $this->unexpectedValueException();
         }
 
         $payload = $response->object();
 
         // @phpstan-ignore-next-line
         if (!($payload instanceof stdClass) && !is_array($payload)) {
-            throw $this->unexpectedValueException('Unexpected response format.');
+            throw $this->unexpectedValueException();
         }
 
         if (!$response->successful()) {
@@ -97,7 +97,7 @@ abstract class Request
     protected function error(stdClass $payload, string $message, int $status): void
     {
         if ($this->validate($payload)) {
-            $error = ErrorException::from($payload);
+            $error = WordPressError::from($payload);
 
             throw match ($error->code) {
                 'term_exists' => new TermExistsException($error, $status),
@@ -108,7 +108,7 @@ abstract class Request
             };
         }
 
-        $error = ErrorException::from((object) [
+        $error = WordPressError::from((object) [
             'code' => (string) $status,
             'message' => $message,
             'data' => (object) [],
@@ -142,10 +142,10 @@ abstract class Request
         return $validator->isValid();
     }
 
-    protected function unexpectedValueException(string $message): UnexpectedValueException
+    protected function unexpectedValueException(): UnexpectedValueException
     {
-        return new UnexpectedValueException(ErrorException::from((object) [
-            'message' => $message,
+        return new UnexpectedValueException(WordPressError::from((object) [
+            'message' => 'Unexpected value.',
             'code' => '500',
             'data' => (object) [],
         ]));

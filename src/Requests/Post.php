@@ -21,7 +21,7 @@ class Post extends Request
         $data = $this->request('get', '/posts');
 
         if (!is_array($data)) {
-            throw $this->unexpectedValueException('Unexpected response format.');
+            throw $this->unexpectedValueException();
         }
 
         return array_map(
@@ -42,7 +42,7 @@ class Post extends Request
         $data = $this->request('post', '/posts', $arguments);
 
         if (is_array($data)) {
-            throw $this->unexpectedValueException('Unexpected response format.');
+            throw $this->unexpectedValueException();
         }
 
         return PostObject::from($data);
@@ -62,7 +62,7 @@ class Post extends Request
         ]);
 
         if (is_array($data)) {
-            throw $this->unexpectedValueException('Unexpected response format.');
+            throw $this->unexpectedValueException();
         }
 
         return PostObject::from($data);
@@ -82,7 +82,7 @@ class Post extends Request
         $data = $this->request('patch', $uri, $arguments);
 
         if (is_array($data)) {
-            throw $this->unexpectedValueException('Unexpected response format.');
+            throw $this->unexpectedValueException();
         }
 
         return PostObject::from($data);

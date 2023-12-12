@@ -6,7 +6,7 @@ namespace Storipress\WordPress\Objects;
 
 use stdClass;
 
-class ErrorException extends WordPressObject
+class WordPressError extends WordPressObject
 {
     public string $code;
 
