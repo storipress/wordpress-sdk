@@ -13,6 +13,7 @@ use Storipress\WordPress\Exceptions\CannotCreateException;
 use Storipress\WordPress\Exceptions\CannotUpdateException;
 use Storipress\WordPress\Exceptions\DuplicateTermSlugException;
 use Storipress\WordPress\Exceptions\ForbiddenException;
+use Storipress\WordPress\Exceptions\NoRouteException;
 use Storipress\WordPress\Exceptions\NotFoundException;
 use Storipress\WordPress\Exceptions\TermExistsException;
 use Storipress\WordPress\Exceptions\UnauthorizedException;
@@ -122,6 +123,7 @@ abstract class Request
                 'duplicate_term_slug' => new DuplicateTermSlugException($error, $status),
                 'rest_cannot_create' => new CannotCreateException($error, $status),
                 'rest_cannot_update' => new CannotUpdateException($error, $status),
+                'rest_no_route' => new NoRouteException($error, $status),
                 default => new UnknownException($error, $status),
             };
         }
