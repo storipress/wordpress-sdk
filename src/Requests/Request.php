@@ -13,6 +13,7 @@ use Storipress\WordPress\Exceptions\CannotCreateException;
 use Storipress\WordPress\Exceptions\CannotUpdateException;
 use Storipress\WordPress\Exceptions\DuplicateTermSlugException;
 use Storipress\WordPress\Exceptions\ForbiddenException;
+use Storipress\WordPress\Exceptions\InvalidPostIdException;
 use Storipress\WordPress\Exceptions\NoRouteException;
 use Storipress\WordPress\Exceptions\NotFoundException;
 use Storipress\WordPress\Exceptions\TermExistsException;
@@ -37,6 +38,11 @@ abstract class Request
      * @param  'get'|'post'|'patch'|'delete'  $method
      * @param  non-empty-string  $path
      * @param  array<mixed>  $options
+     * @param  array<mixed>  $headers
+     * @param  array{
+     *     resource: resource,
+     *     mime: string
+     * }|array{} $body
      * @return ($method is 'delete' ? bool : stdClass|array<int, stdClass>)
      *
      * @throws UnexpectedValueException|WordPressException
@@ -45,6 +51,8 @@ abstract class Request
         string $method,
         string $path,
         array $options = [],
+        array $headers = [],
+        array $body = [],
     ): stdClass|array|bool {
         $http = $this->app->http
             ->withoutVerifying()
@@ -53,6 +61,15 @@ abstract class Request
 
         if ($this->app->userAgent()) {
             $http->withUserAgent($this->app->userAgent());
+        }
+
+        if (!empty($body)) {
+            // @phpstan-ignore-next-line
+            $http->withBody($body['resource'], $body['mime']);
+        }
+
+        if (!empty($headers)) {
+            $http->withHeaders($headers);
         }
 
         $response = $http->{$method}(
@@ -124,6 +141,7 @@ abstract class Request
                 'rest_cannot_create' => new CannotCreateException($error, $status),
                 'rest_cannot_update' => new CannotUpdateException($error, $status),
                 'rest_no_route' => new NoRouteException($error, $status),
+                'rest_post_invalid_id' => new InvalidPostIdException($error, $status),
                 default => new UnknownException($error, $status),
             };
         }
