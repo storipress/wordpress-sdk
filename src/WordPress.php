@@ -7,6 +7,7 @@ namespace Storipress\WordPress;
 use Illuminate\Http\Client\Factory;
 use Storipress\WordPress\Requests\Category;
 use Storipress\WordPress\Requests\GeneralRequest;
+use Storipress\WordPress\Requests\Media;
 use Storipress\WordPress\Requests\Post;
 use Storipress\WordPress\Requests\Tag;
 use Storipress\WordPress\Requests\User;
@@ -22,6 +23,8 @@ class WordPress
     protected readonly Category $category;
 
     protected readonly Tag $tag;
+
+    protected readonly Media $media;
 
     protected string $site;
 
@@ -47,6 +50,8 @@ class WordPress
         $this->category = new Category($this);
 
         $this->tag = new Tag($this);
+
+        $this->media = new Media($this);
     }
 
     public function instance(): static
@@ -149,5 +154,10 @@ class WordPress
     public function tag(): Tag
     {
         return $this->tag;
+    }
+
+    public function media(): Media
+    {
+        return $this->media;
     }
 }
