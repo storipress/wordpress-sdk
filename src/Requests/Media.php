@@ -40,19 +40,9 @@ class Media extends Request
      */
     public function create(UploadedFile $file, array $arguments): MediaObject
     {
-        $uri = sprintf('/media?%s', http_build_query($arguments));
+        $arguments['file'] = $file;
 
-        $data = $this->request(
-            method: 'post',
-            path: $uri,
-            options: [
-                'file' => [
-                    'name' => $file->getFilename(),
-                    'resource' => $file->getContent(),
-                    'mime' => $file->getMimeType(),
-                ],
-            ],
-        );
+        $data = $this->request('post', '/media', $arguments);
 
         if (is_array($data)) {
             throw $this->unexpectedValueException();

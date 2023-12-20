@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Storipress\WordPress\Requests;
 
 use Illuminate\Http\Client\Response;
+use Illuminate\Http\UploadedFile;
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
 use stdClass;
@@ -18,7 +19,6 @@ use Storipress\WordPress\Exceptions\NoRouteException;
 use Storipress\WordPress\Exceptions\NotFoundException;
 use Storipress\WordPress\Exceptions\TermExistsException;
 use Storipress\WordPress\Exceptions\UnauthorizedException;
-use Storipress\WordPress\Exceptions\UnexpectedResourceException;
 use Storipress\WordPress\Exceptions\UnexpectedValueException;
 use Storipress\WordPress\Exceptions\UnknownException;
 use Storipress\WordPress\Exceptions\WordPressException;
@@ -57,27 +57,8 @@ abstract class Request
             $http->withUserAgent($this->app->userAgent());
         }
 
-        if (isset($options['file'])) {
-            $filename = data_get($options, 'file.name');
-
-            $resource = data_get($options, 'file.resource');
-
-            $mime = data_get($options, 'file.mime');
-
-            if (!is_string($filename) || !is_string($resource) || !is_string($mime)) {
-                throw new UnexpectedResourceException(WordPressError::from((object) [
-                    'code' => '400',
-                    'message' => 'Unexpected resource value.',
-                    'data' => (object) [
-                        'file' => $options['file'],
-                    ],
-                ]), 400);
-            }
-
-            $contentDisposition = sprintf('attachment; filename="%s"', $filename);
-
-            $http->withHeader('Content-Disposition', $contentDisposition)
-                ->withBody($resource, $mime);
+        if (isset($options['file']) && $options['file'] instanceof UploadedFile) {
+            $http->attach('file', $options['file']->getContent(), $options['file']->getClientOriginalName());
 
             unset($options['file']);
         }
