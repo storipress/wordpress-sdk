@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Storipress\WordPress\Exceptions;
 
-class CannotOpenResourceException extends WordPressException
+class UnexpectedResourceException extends WordPressException
 {
     //
 }

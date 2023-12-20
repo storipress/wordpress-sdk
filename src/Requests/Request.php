@@ -18,6 +18,7 @@ use Storipress\WordPress\Exceptions\NoRouteException;
 use Storipress\WordPress\Exceptions\NotFoundException;
 use Storipress\WordPress\Exceptions\TermExistsException;
 use Storipress\WordPress\Exceptions\UnauthorizedException;
+use Storipress\WordPress\Exceptions\UnexpectedResourceException;
 use Storipress\WordPress\Exceptions\UnexpectedValueException;
 use Storipress\WordPress\Exceptions\UnknownException;
 use Storipress\WordPress\Exceptions\WordPressException;
@@ -37,12 +38,7 @@ abstract class Request
     /**
      * @param  'get'|'post'|'patch'|'delete'  $method
      * @param  non-empty-string  $path
-     * @param  array<mixed>  $options
-     * @param  array<mixed>  $headers
-     * @param  array{
-     *     resource: resource,
-     *     mime: string
-     * }|array{} $body
+     * @param  array<string, mixed>  $options
      * @return ($method is 'delete' ? bool : stdClass|array<int, stdClass>)
      *
      * @throws UnexpectedValueException|WordPressException
@@ -51,8 +47,6 @@ abstract class Request
         string $method,
         string $path,
         array $options = [],
-        array $headers = [],
-        array $body = [],
     ): stdClass|array|bool {
         $http = $this->app->http
             ->withoutVerifying()
@@ -63,13 +57,29 @@ abstract class Request
             $http->withUserAgent($this->app->userAgent());
         }
 
-        if (!empty($body)) {
-            // @phpstan-ignore-next-line
-            $http->withBody($body['resource'], $body['mime']);
-        }
+        if (isset($options['file'])) {
+            $filename = data_get($options, 'file.name');
 
-        if (!empty($headers)) {
-            $http->withHeaders($headers);
+            $resource = data_get($options, 'file.resource');
+
+            $mime = data_get($options, 'file.mime');
+
+            if (!is_string($filename) || !is_string($resource) || !is_string($mime)) {
+                throw new UnexpectedResourceException(WordPressError::from((object) [
+                    'code' => '400',
+                    'message' => 'Unexpected resource value.',
+                    'data' => (object) [
+                        'file' => $options['file'],
+                    ],
+                ]), 400);
+            }
+
+            $contentDisposition = sprintf('attachment; filename="%s"', $filename);
+
+            $http->withHeader('Content-Disposition', $contentDisposition)
+                ->withBody($resource, $mime);
+
+            unset($options['file']);
         }
 
         $response = $http->{$method}(

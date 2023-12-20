@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Storipress\WordPress\Requests;
 
-use Storipress\WordPress\Exceptions\CannotOpenResourceException;
+use Illuminate\Http\UploadedFile;
 use Storipress\WordPress\Exceptions\WordPressException;
 use Storipress\WordPress\Objects\Media as MediaObject;
-use Storipress\WordPress\Objects\WordPressError;
 
 class Media extends Request
 {
@@ -39,38 +38,20 @@ class Media extends Request
      *
      * @throws WordPressException
      */
-    public function create(string $path, array $arguments): MediaObject
+    public function create(UploadedFile $file, array $arguments): MediaObject
     {
-        $mime = mime_content_type($path);
-
-        $filename = basename($path);
-
-        $file = fopen($path, 'r');
-
-        if ($file === false || $mime === false) {
-            $error = WordPressError::from((object) [
-                'code' => '400',
-                'message' => 'Can\'t open resource.',
-                'data' => (object) [],
-            ]);
-
-            throw new CannotOpenResourceException($error, 400);
-        }
-
-        $contentDisposition = sprintf('attachment; filename="%s"', $filename);
-
         $uri = sprintf('/media?%s', http_build_query($arguments));
 
         $data = $this->request(
             method: 'post',
             path: $uri,
-            headers: [
-                'Content-Disposition' => $contentDisposition,
+            options: [
+                'file' => [
+                    'name' => $file->getFilename(),
+                    'resource' => $file->getContent(),
+                    'mime' => $file->getMimeType(),
+                ],
             ],
-            body: [
-                'resource' => $file,
-                'mime' => $mime,
-            ]
         );
 
         if (is_array($data)) {
