@@ -42,10 +42,7 @@ class Media extends WordPressObject
 
     public Render $caption;
 
-    /**
-     * @var array<mixed>
-     */
-    public array $meta;
+    public stdClass $meta;
 
     public string $alt_text;
 
