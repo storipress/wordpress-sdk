@@ -1,4 +1,7 @@
 ## 1.x
+- 1.0.5 (2023-12-25)
+  - Fix media meta type
+
 - 1.0.4 (2023-12-20)
   - Add media endpoint
 
