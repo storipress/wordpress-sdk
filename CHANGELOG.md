@@ -1,4 +1,7 @@
 ## 1.x
+- 1.0.6 (2023-12-25)
+  - Fix empty media meta data
+
 - 1.0.5 (2023-12-25)
   - Fix media meta type
 
