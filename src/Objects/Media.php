@@ -66,6 +66,8 @@ class Media extends WordPressObject
 
         $data->caption = Render::from($data->caption);
 
+        $data->meta = is_array($data->meta) ? (object) $data->meta : $data->meta;
+
         $data->media_details = MediaDetails::from($data->media_details);
 
         return parent::from($data);
