@@ -1,4 +1,8 @@
 ## 1.x
+- 1.0.7 (2024-01-05)
+  - Add list arguments
+  - Add invalid post page exception
+
 - 1.0.6 (2023-12-25)
   - Fix empty media meta data
 
