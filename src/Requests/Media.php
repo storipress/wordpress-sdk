@@ -13,13 +13,14 @@ class Media extends Request
     /**
      * https://developer.wordpress.org/rest-api/reference/media/#list-media
      *
+     * @param  array<string, mixed>  $arguments
      * @return array<int, MediaObject>
      *
      * @throws WordPressException
      */
-    public function list(): array
+    public function list(array $arguments = []): array
     {
-        $data = $this->request('get', '/media');
+        $data = $this->request('get', '/media', $arguments);
 
         if (!is_array($data)) {
             throw $this->unexpectedValueException();

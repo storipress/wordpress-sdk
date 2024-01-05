@@ -12,13 +12,14 @@ class Category extends Request
     /**
      * https://developer.wordpress.org/rest-api/reference/categories/#list-categories
      *
+     * @param  array<string, mixed>  $arguments
      * @return array<int, CategoryObject>
      *
      * @throws WordPressException
      */
-    public function list(): array
+    public function list(array $arguments = []): array
     {
-        $data = $this->request('get', '/categories');
+        $data = $this->request('get', '/categories', $arguments);
 
         if (!is_array($data)) {
             throw $this->unexpectedValueException();

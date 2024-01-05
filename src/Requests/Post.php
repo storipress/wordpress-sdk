@@ -12,13 +12,14 @@ class Post extends Request
     /**
      * https://developer.wordpress.org/rest-api/reference/posts/#list-posts
      *
+     * @param  array<string, mixed>  $arguments
      * @return array<int, PostObject>
      *
      * @throws WordPressException
      */
-    public function list(): array
+    public function list(array $arguments = []): array
     {
-        $data = $this->request('get', '/posts');
+        $data = $this->request('get', '/posts', $arguments);
 
         if (!is_array($data)) {
             throw $this->unexpectedValueException();

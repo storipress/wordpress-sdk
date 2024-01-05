@@ -15,6 +15,7 @@ use Storipress\WordPress\Exceptions\CannotUpdateException;
 use Storipress\WordPress\Exceptions\DuplicateTermSlugException;
 use Storipress\WordPress\Exceptions\ForbiddenException;
 use Storipress\WordPress\Exceptions\InvalidPostIdException;
+use Storipress\WordPress\Exceptions\InvalidPostPageNumberException;
 use Storipress\WordPress\Exceptions\NoRouteException;
 use Storipress\WordPress\Exceptions\NotFoundException;
 use Storipress\WordPress\Exceptions\TermExistsException;
@@ -133,6 +134,7 @@ abstract class Request
                 'rest_cannot_update' => new CannotUpdateException($error, $status),
                 'rest_no_route' => new NoRouteException($error, $status),
                 'rest_post_invalid_id' => new InvalidPostIdException($error, $status),
+                'rest_post_invalid_page_number' => new InvalidPostPageNumberException($error, $status),
                 default => new UnknownException($error, $status),
             };
         }

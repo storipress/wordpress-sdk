@@ -16,7 +16,7 @@ class GeneralRequest extends Request
      *
      * @throws WordPressException
      */
-    public function get(string $path, array $arguments): stdClass|array
+    public function get(string $path, array $arguments = []): stdClass|array
     {
         return $this->request('get', $path, $arguments);
     }
@@ -28,7 +28,7 @@ class GeneralRequest extends Request
      *
      * @throws WordPressException
      */
-    public function post(string $path, array $arguments): stdClass|array
+    public function post(string $path, array $arguments = []): stdClass|array
     {
         return $this->request('post', $path, $arguments);
     }
@@ -40,7 +40,7 @@ class GeneralRequest extends Request
      *
      * @throws WordPressException
      */
-    public function patch(string $path, array $arguments): stdClass|array
+    public function patch(string $path, array $arguments = []): stdClass|array
     {
         return $this->request('patch', $path, $arguments);
     }
@@ -51,7 +51,7 @@ class GeneralRequest extends Request
      *
      * @throws WordPressException
      */
-    public function delete(string $path, array $arguments): bool
+    public function delete(string $path, array $arguments = []): bool
     {
         return $this->request('delete', $path, $arguments);
     }

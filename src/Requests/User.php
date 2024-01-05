@@ -12,13 +12,14 @@ class User extends Request
     /**
      * https://developer.wordpress.org/rest-api/reference/users/#list-users
      *
+     * @param  array<string, mixed>  $arguments
      * @return array<int, UserObject>
      *
      * @throws WordPressException
      */
-    public function list(): array
+    public function list(array $arguments = []): array
     {
-        $data = $this->request('get', '/users');
+        $data = $this->request('get', '/users', $arguments);
 
         if (!is_array($data)) {
             throw $this->unexpectedValueException();

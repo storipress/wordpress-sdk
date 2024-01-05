@@ -12,13 +12,14 @@ class Tag extends Request
     /**
      * https://developer.wordpress.org/rest-api/reference/tags/#list-tags
      *
+     * @param  array<string, mixed>  $arguments
      * @return array<int, TagObject>
      *
      * @throws WordPressException
      */
-    public function list(): array
+    public function list(array $arguments = []): array
     {
-        $data = $this->request('get', '/tags');
+        $data = $this->request('get', '/tags', $arguments);
 
         if (!is_array($data)) {
             throw $this->unexpectedValueException();
@@ -58,7 +59,7 @@ class Tag extends Request
         $uri = sprintf('/tags/%d', $tagId);
 
         $data = $this->request('get', $uri, [
-            'context' => 'view',
+            'context' => $context,
         ]);
 
         if (is_array($data)) {
