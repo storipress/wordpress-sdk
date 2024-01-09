@@ -1,4 +1,7 @@
 ## 1.x
+- 1.0.8 (2024-01-09)
+  - Add invalid param exception
+
 - 1.0.7 (2024-01-05)
   - Add list arguments
   - Add invalid post page exception
