@@ -1,4 +1,7 @@
 ## 1.x
+- 1.0.9 (2024-01-11)
+  - Add __isset method
+
 - 1.0.8 (2024-01-09)
   - Add invalid param exception
 

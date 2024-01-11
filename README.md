@@ -13,7 +13,7 @@
 
 ## Version
 
-1.0.8
+1.0.9
 
 ### Supported Laravel Version
 
