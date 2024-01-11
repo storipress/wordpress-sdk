@@ -40,4 +40,9 @@ abstract class WordPressObject
     {
         return $this->_map[$key] ?? null;
     }
+
+    public function __isset(string $key): bool
+    {
+        return isset($this->_map[$key]);
+    }
 }
