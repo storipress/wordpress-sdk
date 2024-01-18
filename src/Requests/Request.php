@@ -105,7 +105,7 @@ abstract class Request
         if ($pretty) {
             return sprintf(
                 '%s/%s/wp/%s/%s',
-                rtrim($this->app->site(), '/'),
+                rtrim($this->app->url(), '/'),
                 $prefix,
                 self::VERSION,
                 ltrim($path, '/'),
@@ -114,7 +114,7 @@ abstract class Request
 
         return sprintf(
             '%s?rest_route=/wp/%s/%s',
-            rtrim($this->app->site(), '/'),
+            rtrim($this->app->url(), '/'),
             self::VERSION,
             ltrim($path, '/'),
         );

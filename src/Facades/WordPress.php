@@ -9,6 +9,7 @@ use Storipress\WordPress\Requests\Category;
 use Storipress\WordPress\Requests\GeneralRequest;
 use Storipress\WordPress\Requests\Media;
 use Storipress\WordPress\Requests\Post;
+use Storipress\WordPress\Requests\Site;
 use Storipress\WordPress\Requests\Tag;
 use Storipress\WordPress\Requests\User;
 
@@ -19,9 +20,10 @@ use Storipress\WordPress\Requests\User;
  * @method static Category category()
  * @method static Tag tag()
  * @method static Media media()
+ * @method static Site site()
  * @method static \Storipress\WordPress\WordPress instance()
- * @method static \Storipress\WordPress\WordPress site()
- * @method static \Storipress\WordPress\WordPress setSite(string $site)
+ * @method static \Storipress\WordPress\WordPress url()
+ * @method static \Storipress\WordPress\WordPress setUrl(string $url)
  * @method static \Storipress\WordPress\WordPress username()
  * @method static \Storipress\WordPress\WordPress setUsername(string $username)
  * @method static \Storipress\WordPress\WordPress password()
