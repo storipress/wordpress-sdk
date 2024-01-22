@@ -1,4 +1,7 @@
 ## 1.x
+- 1.0.10 (2024-01-22)
+  - Add site endpoint
+
 - 1.0.9 (2024-01-11)
   - Add __isset method
 
