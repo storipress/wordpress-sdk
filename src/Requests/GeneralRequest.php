@@ -61,7 +61,7 @@ class GeneralRequest extends Request
         if ($pretty) {
             return sprintf(
                 '%s/%s/%s',
-                rtrim($this->app->site(), '/'),
+                rtrim($this->app->url(), '/'),
                 $prefix,
                 ltrim($path, '/'),
             );
@@ -69,7 +69,7 @@ class GeneralRequest extends Request
 
         return sprintf(
             '%s?rest_route=/%s',
-            rtrim($this->app->site(), '/'),
+            rtrim($this->app->url(), '/'),
             ltrim($path, '/'),
         );
     }

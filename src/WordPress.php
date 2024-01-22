@@ -9,6 +9,7 @@ use Storipress\WordPress\Requests\Category;
 use Storipress\WordPress\Requests\GeneralRequest;
 use Storipress\WordPress\Requests\Media;
 use Storipress\WordPress\Requests\Post;
+use Storipress\WordPress\Requests\Site;
 use Storipress\WordPress\Requests\Tag;
 use Storipress\WordPress\Requests\User;
 
@@ -26,7 +27,9 @@ class WordPress
 
     protected readonly Media $media;
 
-    protected string $site;
+    protected readonly Site $site;
+
+    protected string $url;
 
     protected string $username;
 
@@ -52,6 +55,8 @@ class WordPress
         $this->tag = new Tag($this);
 
         $this->media = new Media($this);
+
+        $this->site = new Site($this);
     }
 
     public function instance(): static
@@ -59,14 +64,14 @@ class WordPress
         return $this;
     }
 
-    public function site(): string
+    public function url(): string
     {
-        return $this->site;
+        return $this->url;
     }
 
-    public function setSite(string $site): static
+    public function setUrl(string $url): static
     {
-        $this->site = $site;
+        $this->url = $url;
 
         return $this;
     }
@@ -159,5 +164,10 @@ class WordPress
     public function media(): Media
     {
         return $this->media;
+    }
+
+    public function site(): Site
+    {
+        return $this->site;
     }
 }
