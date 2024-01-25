@@ -80,8 +80,6 @@ abstract class Request
             $options,
         );
 
-        dump($response->json());
-
         if (!($response instanceof Response)) {
             throw $this->unexpectedValueException();
         }
