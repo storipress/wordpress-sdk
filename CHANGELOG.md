@@ -1,5 +1,14 @@
 ## 1.x
-- 1.0.10 (2024-01-22)
+- 1.0.11 (2024-01-25)
+  - Add exceptions
+    - rest_user_invalid_id
+    - rest_user_invalid_slug
+    - existing_user_login
+    - rest_invalid_author
+    - rest_already_trashed
+    - wp_die
+
+- 1.0.11 (2024-01-25)
   - Add site endpoint
 
 - 1.0.9 (2024-01-11)
