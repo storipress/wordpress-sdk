@@ -14,16 +14,22 @@ use Storipress\WordPress\Exceptions\CannotCreateException;
 use Storipress\WordPress\Exceptions\CannotUpdateException;
 use Storipress\WordPress\Exceptions\DuplicateTermSlugException;
 use Storipress\WordPress\Exceptions\ForbiddenException;
+use Storipress\WordPress\Exceptions\InvalidAuthorIdException;
 use Storipress\WordPress\Exceptions\InvalidParamException;
 use Storipress\WordPress\Exceptions\InvalidPostIdException;
 use Storipress\WordPress\Exceptions\InvalidPostPageNumberException;
+use Storipress\WordPress\Exceptions\InvalidUserIdException;
+use Storipress\WordPress\Exceptions\InvalidUserSlugException;
 use Storipress\WordPress\Exceptions\NoRouteException;
 use Storipress\WordPress\Exceptions\NotFoundException;
+use Storipress\WordPress\Exceptions\PostAlreadyTrashedException;
 use Storipress\WordPress\Exceptions\TermExistsException;
 use Storipress\WordPress\Exceptions\UnauthorizedException;
 use Storipress\WordPress\Exceptions\UnexpectedValueException;
 use Storipress\WordPress\Exceptions\UnknownException;
+use Storipress\WordPress\Exceptions\UsernameExistsException;
 use Storipress\WordPress\Exceptions\WordPressException;
+use Storipress\WordPress\Exceptions\WpDieException;
 use Storipress\WordPress\Objects\WordPressError;
 use Storipress\WordPress\WordPress;
 
@@ -73,6 +79,8 @@ abstract class Request
             ),
             $options,
         );
+
+        dump($response->json());
 
         if (!($response instanceof Response)) {
             throw $this->unexpectedValueException();
@@ -137,6 +145,12 @@ abstract class Request
                 'rest_post_invalid_id' => new InvalidPostIdException($error, $status),
                 'rest_post_invalid_page_number' => new InvalidPostPageNumberException($error, $status),
                 'rest_invalid_param' => new InvalidParamException($error, $status),
+                'rest_user_invalid_id' => new InvalidUserIdException($error, $status),
+                'rest_user_invalid_slug' => new InvalidUserSlugException($error, $status),
+                'existing_user_login' => new UsernameExistsException($error, $status),
+                'rest_invalid_author' => new InvalidAuthorIdException($error, $status),
+                'rest_already_trashed' => new PostAlreadyTrashedException($error, $status),
+                'wp_die' => new WpDieException($error, $status),
                 default => new UnknownException($error, $status),
             };
         }
