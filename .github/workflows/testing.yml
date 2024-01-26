@@ -25,7 +25,7 @@ jobs:
         run: echo "COMPOSER_DIR=$(composer config cache-files-dir)" >> $GITHUB_ENV
 
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.COMPOSER_DIR }}
           key: ${{ runner.os }}-composer-static-analyze-${{ hashFiles('**/composer.json') }}
@@ -76,7 +76,7 @@ jobs:
         run: echo "COMPOSER_DIR=$(composer config cache-files-dir)" >> $GITHUB_ENV
 
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.COMPOSER_DIR }}
           key: ${{ runner.os }}-composer-php-${{ matrix.php }}-${{ hashFiles('**/composer.json') }}
