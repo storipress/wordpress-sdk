@@ -2,7 +2,6 @@ name: Testing
 
 on:
   push:
-  pull_request:
   schedule:
     - cron: '0 0 * * 1' # run tests on every week Monday
 
@@ -50,7 +49,7 @@ jobs:
         run: vendor/bin/pint -v --test
 
       - name: Run type coverage check
-        run: vendor/bin/pest --type-coverage --min=90
+        run: vendor/bin/pest --memory-limit=-1 --type-coverage --min=90
 
   testing:
     name: PHP ${{ matrix.php }} (Testing)
