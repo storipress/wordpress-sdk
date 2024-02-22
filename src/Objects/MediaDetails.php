@@ -14,7 +14,7 @@ class MediaDetails extends WordPressObject
 
     public string $file;
 
-    public int $filesize;
+    public ?int $filesize = null;
 
     public stdClass $sizes;
 
