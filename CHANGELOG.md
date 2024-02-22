@@ -1,4 +1,8 @@
 ## 1.x
+
+- 1.0.12 (2024-02-22)
+  - Fix media details object type issue
+
 - 1.0.11 (2024-01-25)
   - Add exceptions
     - rest_user_invalid_id
@@ -34,7 +38,7 @@
   - Add common exceptions
 
 - 1.0.2 (2023-12-01)
-  - Support configure user agent
+  - Support setup user agent
 
 - 1.0.1 (2023-11-27)
   - TLS certificate verification is now disabled
