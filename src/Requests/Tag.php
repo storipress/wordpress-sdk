@@ -21,7 +21,7 @@ class Tag extends Request
     {
         $data = $this->request('get', '/tags', $arguments);
 
-        if (!is_array($data)) {
+        if (! is_array($data)) {
             throw $this->unexpectedValueException();
         }
 

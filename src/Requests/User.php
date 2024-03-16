@@ -21,7 +21,7 @@ class User extends Request
     {
         $data = $this->request('get', '/users', $arguments);
 
-        if (!is_array($data)) {
+        if (! is_array($data)) {
             throw $this->unexpectedValueException();
         }
 

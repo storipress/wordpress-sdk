@@ -80,18 +80,18 @@ abstract class Request
             $options,
         );
 
-        if (!($response instanceof Response)) {
+        if (! ($response instanceof Response)) {
             throw $this->unexpectedValueException();
         }
 
         $payload = $response->object();
 
         // @phpstan-ignore-next-line
-        if (!($payload instanceof stdClass) && !is_array($payload)) {
+        if (! ($payload instanceof stdClass) && ! is_array($payload)) {
             throw $this->unexpectedValueException();
         }
 
-        if (!$response->successful()) {
+        if (! $response->successful()) {
             $this->error(
                 $payload,
                 $response->body(),
