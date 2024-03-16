@@ -1,0 +1,2 @@
+providers:
+  - Storipress\WordPress\WordPressServiceProvider
