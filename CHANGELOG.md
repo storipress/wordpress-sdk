@@ -1,5 +1,8 @@
 ## 1.x
 
+- 1.0.13 (2024-03-17)
+  - Support Laravel 11
+
 - 1.0.12 (2024-02-22)
   - Fix media details object type issue
 

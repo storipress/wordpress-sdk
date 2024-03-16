@@ -13,11 +13,11 @@
 
 ## Version
 
-1.0.12
+1.0.13
 
 ### Supported Laravel Version
 
-10.x
+10.x ~ 11.x
 
 ## Installation
 
