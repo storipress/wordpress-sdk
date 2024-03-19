@@ -1,46 +1,46 @@
 {
-    "name": "storipress/wordpress-sdk",
-    "description": "WordPress REST API SDK for Laravel",
-    "license": "MIT",
-    "type": "library",
-    "require": {
-        "php": "^8.1",
-        "ext-fileinfo": "*",
-        "illuminate/http": "^10.0",
-        "illuminate/support": "^10.0",
-        "justinrainbow/json-schema": "^5.2"
-    },
-    "require-dev": {
-        "ergebnis/composer-normalize": "^2.39",
-        "guzzlehttp/guzzle": "^7.8",
-        "laravel/pint": "^1.13",
-        "nunomaduro/larastan": "^2.6",
-        "orchestra/testbench": "^8.15",
-        "pestphp/pest-plugin-laravel": "^2.2",
-        "pestphp/pest-plugin-type-coverage": "^2.4"
-    },
-    "minimum-stability": "stable",
-    "prefer-stable": true,
-    "autoload": {
-        "psr-4": {
-            "Storipress\\WordPress\\": "src/"
-        }
-    },
-    "config": {
-        "allow-plugins": {
-            "ergebnis/composer-normalize": true,
-            "pestphp/pest-plugin": true
-        },
-        "sort-packages": true
-    },
-    "extra": {
-        "laravel": {
-            "aliases": {
-                "WordPress": "Storipress\\WordPress\\Facades\\WordPress"
-            },
-            "providers": [
-                "Storipress\\WordPress\\WordPressServiceProvider"
-            ]
-        }
+  "name": "storipress/wordpress-sdk",
+  "description": "WordPress REST API SDK for Laravel",
+  "license": "MIT",
+  "type": "library",
+  "require": {
+    "php": "^8.1",
+    "ext-fileinfo": "*",
+    "illuminate/http": "^10.0 || ^11.0",
+    "illuminate/support": "^10.0 || ^11.0",
+    "justinrainbow/json-schema": "^5.2"
+  },
+  "require-dev": {
+    "ergebnis/composer-normalize": "^2.42",
+    "guzzlehttp/guzzle": "^7.8",
+    "larastan/larastan": "^2.9",
+    "laravel/pint": "^1.14",
+    "orchestra/testbench": "^8.22 || ^9.0",
+    "pestphp/pest-plugin-laravel": "^2.3",
+    "pestphp/pest-plugin-type-coverage": "^2.8"
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "autoload": {
+    "psr-4": {
+      "Storipress\\WordPress\\": "src/"
     }
+  },
+  "config": {
+    "allow-plugins": {
+      "ergebnis/composer-normalize": true,
+      "pestphp/pest-plugin": true
+    },
+    "sort-packages": true
+  },
+  "extra": {
+    "laravel": {
+      "aliases": {
+        "WordPress": "Storipress\\WordPress\\Facades\\WordPress"
+      },
+      "providers": [
+        "Storipress\\WordPress\\WordPressServiceProvider"
+      ]
+    }
+  }
 }

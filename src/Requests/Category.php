@@ -21,7 +21,7 @@ class Category extends Request
     {
         $data = $this->request('get', '/categories', $arguments);
 
-        if (!is_array($data)) {
+        if (! is_array($data)) {
             throw $this->unexpectedValueException();
         }
 

@@ -22,7 +22,7 @@ class Media extends Request
     {
         $data = $this->request('get', '/media', $arguments);
 
-        if (!is_array($data)) {
+        if (! is_array($data)) {
             throw $this->unexpectedValueException();
         }
 
