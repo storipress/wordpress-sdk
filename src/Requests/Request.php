@@ -11,6 +11,7 @@ use JsonSchema\Validator;
 use stdClass;
 use Storipress\WordPress\Exceptions\BadRequestException;
 use Storipress\WordPress\Exceptions\CannotCreateException;
+use Storipress\WordPress\Exceptions\CannotEditException;
 use Storipress\WordPress\Exceptions\CannotUpdateException;
 use Storipress\WordPress\Exceptions\DuplicateTermSlugException;
 use Storipress\WordPress\Exceptions\ForbiddenException;
@@ -23,10 +24,12 @@ use Storipress\WordPress\Exceptions\InvalidUserSlugException;
 use Storipress\WordPress\Exceptions\NoRouteException;
 use Storipress\WordPress\Exceptions\NotFoundException;
 use Storipress\WordPress\Exceptions\PostAlreadyTrashedException;
+use Storipress\WordPress\Exceptions\RestForbiddenException;
 use Storipress\WordPress\Exceptions\TermExistsException;
 use Storipress\WordPress\Exceptions\UnauthorizedException;
 use Storipress\WordPress\Exceptions\UnexpectedValueException;
 use Storipress\WordPress\Exceptions\UnknownException;
+use Storipress\WordPress\Exceptions\UploadUnknownErrorException;
 use Storipress\WordPress\Exceptions\UsernameExistsException;
 use Storipress\WordPress\Exceptions\WordPressException;
 use Storipress\WordPress\Exceptions\WpDieException;
@@ -139,6 +142,8 @@ abstract class Request
                 'duplicate_term_slug' => new DuplicateTermSlugException($error, $status),
                 'rest_cannot_create' => new CannotCreateException($error, $status),
                 'rest_cannot_update' => new CannotUpdateException($error, $status),
+                'rest_cannot_edit' => new CannotEditException($error, $status),
+                'rest_upload_unknown_error' => new UploadUnknownErrorException($error, $status),
                 'rest_no_route' => new NoRouteException($error, $status),
                 'rest_post_invalid_id' => new InvalidPostIdException($error, $status),
                 'rest_post_invalid_page_number' => new InvalidPostPageNumberException($error, $status),
@@ -148,6 +153,7 @@ abstract class Request
                 'existing_user_login' => new UsernameExistsException($error, $status),
                 'rest_invalid_author' => new InvalidAuthorIdException($error, $status),
                 'rest_already_trashed' => new PostAlreadyTrashedException($error, $status),
+                'rest_forbidden' => new RestForbiddenException($error, $status),
                 'wp_die' => new WpDieException($error, $status),
                 default => new UnknownException($error, $status),
             };
