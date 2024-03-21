@@ -1,5 +1,12 @@
 ## 1.x
 
+- 1.0.14 (2024-03-21)
+  - Add exceptions
+    - rest_cannot_edit
+    - rest_upload_unknown_error
+    - rest_forbidden
+    - existing_user_email
+
 - 1.0.13 (2024-03-17)
   - Support Laravel 11
 
