@@ -135,8 +135,6 @@ abstract class Request
      */
     protected function error(stdClass $payload, string $message, int $status): void
     {
-        dump($payload);
-
         if ($this->validate($payload)) {
             $error = WordPressError::from($payload);
 
