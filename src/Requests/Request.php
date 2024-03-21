@@ -30,6 +30,7 @@ use Storipress\WordPress\Exceptions\UnauthorizedException;
 use Storipress\WordPress\Exceptions\UnexpectedValueException;
 use Storipress\WordPress\Exceptions\UnknownException;
 use Storipress\WordPress\Exceptions\UploadUnknownErrorException;
+use Storipress\WordPress\Exceptions\UserEmailExistsException;
 use Storipress\WordPress\Exceptions\UsernameExistsException;
 use Storipress\WordPress\Exceptions\WordPressException;
 use Storipress\WordPress\Exceptions\WpDieException;
@@ -134,6 +135,8 @@ abstract class Request
      */
     protected function error(stdClass $payload, string $message, int $status): void
     {
+        dump($payload);
+
         if ($this->validate($payload)) {
             $error = WordPressError::from($payload);
 
@@ -151,6 +154,7 @@ abstract class Request
                 'rest_user_invalid_id' => new InvalidUserIdException($error, $status),
                 'rest_user_invalid_slug' => new InvalidUserSlugException($error, $status),
                 'existing_user_login' => new UsernameExistsException($error, $status),
+                'existing_user_email' => new UserEmailExistsException($error, $status),
                 'rest_invalid_author' => new InvalidAuthorIdException($error, $status),
                 'rest_already_trashed' => new PostAlreadyTrashedException($error, $status),
                 'rest_forbidden' => new RestForbiddenException($error, $status),
