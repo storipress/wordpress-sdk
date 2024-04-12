@@ -42,6 +42,9 @@ abstract class Request
 {
     const VERSION = 'v2';
 
+    /**
+     * Create a new request instance.
+     */
     public function __construct(
         protected readonly WordPress $app,
     ) {
@@ -52,7 +55,7 @@ abstract class Request
      * @param  'get'|'post'|'patch'|'delete'  $method
      * @param  non-empty-string  $path
      * @param  array<string, mixed>  $options
-     * @return ($method is 'delete' ? bool : stdClass|array<int, stdClass>)
+     * @return ($method is 'delete' ? bool : ($expectArray is true ? array<int, stdClass> : stdClass))
      *
      * @throws UnexpectedValueException|WordPressException
      */
@@ -60,6 +63,7 @@ abstract class Request
         string $method,
         string $path,
         array $options = [],
+        bool $expectArray = false,
     ): stdClass|array|bool {
         $http = $this->app->http
             ->withoutVerifying()
@@ -71,7 +75,11 @@ abstract class Request
         }
 
         if (isset($options['file']) && $options['file'] instanceof UploadedFile) {
-            $http->attach('file', $options['file']->getContent(), $options['file']->getClientOriginalName());
+            $http->attach(
+                'file',
+                $options['file']->getContent(),
+                $options['file']->getClientOriginalName(),
+            );
 
             unset($options['file']);
         }
@@ -86,22 +94,29 @@ abstract class Request
         );
 
         if (! ($response instanceof Response)) {
-            throw $this->unexpectedValueException();
+            $this->throwUnexpectedValueException(get_class($response) ?: '');
         }
 
         $payload = $response->object();
 
-        // @phpstan-ignore-next-line
-        if (! ($payload instanceof stdClass) && ! is_array($payload)) {
-            throw $this->unexpectedValueException();
-        }
-
         if (! $response->successful()) {
-            $this->error(
+            $this->toException(
                 $payload,
                 $response->body(),
                 $response->status(),
             );
+        }
+
+        if ($expectArray) {
+            if (! is_array($payload)) {
+                $this->throwUnexpectedValueException($response->body());
+            }
+
+            return $payload;
+        }
+
+        if (! ($payload instanceof stdClass)) {
+            $this->throwUnexpectedValueException($response->body());
         }
 
         if ($method === 'delete') {
@@ -134,7 +149,7 @@ abstract class Request
     /**
      * @throws WordPressException
      */
-    protected function error(stdClass $payload, string $message, int $status): void
+    protected function toException(stdClass $payload, string $message, int $status): void
     {
         if ($this->validate($payload)) {
             $error = WordPressError::from($payload);
@@ -197,12 +212,21 @@ abstract class Request
         return $validator->isValid();
     }
 
-    protected function unexpectedValueException(): UnexpectedValueException
+    /**
+     * Throw UnexpectedValueException.
+     *
+     * @throws UnexpectedValueException
+     */
+    public function throwUnexpectedValueException(string $body = ''): void
     {
-        return new UnexpectedValueException(WordPressError::from((object) [
-            'message' => 'Unexpected value.',
-            'code' => '500',
-            'data' => (object) [],
-        ]));
+        throw new UnexpectedValueException(
+            WordPressError::from((object) [
+                'message' => sprintf('Unexpected value: %s', $body),
+                'code' => '500',
+                'data' => (object) [
+                    'body' => $body,
+                ],
+            ]),
+        );
     }
 }

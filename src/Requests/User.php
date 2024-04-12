@@ -19,11 +19,12 @@ class User extends Request
      */
     public function list(array $arguments = []): array
     {
-        $data = $this->request('get', '/users', $arguments);
-
-        if (! is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
+        $data = $this->request(
+            'get',
+            '/users',
+            $arguments,
+            true,
+        );
 
         return array_map(
             fn ($data) => UserObject::from($data),
@@ -42,10 +43,6 @@ class User extends Request
     {
         $data = $this->request('post', '/users', $arguments);
 
-        if (is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
-
         return UserObject::from($data);
     }
 
@@ -62,10 +59,6 @@ class User extends Request
             'context' => $context,
         ]);
 
-        if (is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
-
         return UserObject::from($data);
     }
 
@@ -81,10 +74,6 @@ class User extends Request
         $uri = sprintf('/users/%d', $userId);
 
         $data = $this->request('patch', $uri, $arguments);
-
-        if (is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
 
         return UserObject::from($data);
     }

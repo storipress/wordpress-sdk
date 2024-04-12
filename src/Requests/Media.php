@@ -20,11 +20,12 @@ class Media extends Request
      */
     public function list(array $arguments = []): array
     {
-        $data = $this->request('get', '/media', $arguments);
-
-        if (! is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
+        $data = $this->request(
+            'get',
+            '/media',
+            $arguments,
+            true,
+        );
 
         return array_map(
             fn ($data) => MediaObject::from($data),
@@ -45,10 +46,6 @@ class Media extends Request
 
         $data = $this->request('post', '/media', $arguments);
 
-        if (is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
-
         return MediaObject::from($data);
     }
 
@@ -66,10 +63,6 @@ class Media extends Request
             'context' => $context,
         ]);
 
-        if (is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
-
         return MediaObject::from($data);
     }
 
@@ -85,10 +78,6 @@ class Media extends Request
         $uri = sprintf('/media/%d', $mediaId);
 
         $data = $this->request('patch', $uri, $arguments);
-
-        if (is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
 
         return MediaObject::from($data);
     }

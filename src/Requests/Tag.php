@@ -19,11 +19,12 @@ class Tag extends Request
      */
     public function list(array $arguments = []): array
     {
-        $data = $this->request('get', '/tags', $arguments);
-
-        if (! is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
+        $data = $this->request(
+            'get',
+            '/tags',
+            $arguments,
+            true,
+        );
 
         return array_map(
             fn ($data) => TagObject::from($data),
@@ -42,10 +43,6 @@ class Tag extends Request
     {
         $data = $this->request('post', '/tags', $arguments);
 
-        if (is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
-
         return TagObject::from($data);
     }
 
@@ -62,10 +59,6 @@ class Tag extends Request
             'context' => $context,
         ]);
 
-        if (is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
-
         return TagObject::from($data);
     }
 
@@ -81,10 +74,6 @@ class Tag extends Request
         $uri = sprintf('/tags/%d', $tagId);
 
         $data = $this->request('patch', $uri, $arguments);
-
-        if (is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
 
         return TagObject::from($data);
     }

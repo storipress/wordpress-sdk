@@ -19,11 +19,12 @@ class Category extends Request
      */
     public function list(array $arguments = []): array
     {
-        $data = $this->request('get', '/categories', $arguments);
-
-        if (! is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
+        $data = $this->request(
+            'get',
+            '/categories',
+            $arguments,
+            true,
+        );
 
         return array_map(
             fn ($data) => CategoryObject::from($data),
@@ -42,10 +43,6 @@ class Category extends Request
     {
         $data = $this->request('post', '/categories', $arguments);
 
-        if (is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
-
         return CategoryObject::from($data);
     }
 
@@ -62,10 +59,6 @@ class Category extends Request
             'context' => $context,
         ]);
 
-        if (is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
-
         return CategoryObject::from($data);
     }
 
@@ -81,10 +74,6 @@ class Category extends Request
         $uri = sprintf('/categories/%d', $categoryId);
 
         $data = $this->request('patch', $uri, $arguments);
-
-        if (is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
 
         return CategoryObject::from($data);
     }

@@ -19,10 +19,6 @@ class Site extends Request
     {
         $data = $this->request('get', '/settings');
 
-        if (is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
-
         return SiteObject::from($data);
     }
 
@@ -57,10 +53,6 @@ class Site extends Request
     public function update(array $arguments): SiteObject
     {
         $data = $this->request('post', '/settings', $arguments);
-
-        if (is_array($data)) {
-            throw $this->unexpectedValueException();
-        }
 
         return SiteObject::from($data);
     }
