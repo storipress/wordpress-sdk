@@ -15,6 +15,7 @@ use Storipress\WordPress\Exceptions\CannotEditException;
 use Storipress\WordPress\Exceptions\CannotUpdateException;
 use Storipress\WordPress\Exceptions\DuplicateTermSlugException;
 use Storipress\WordPress\Exceptions\ForbiddenException;
+use Storipress\WordPress\Exceptions\IncorrectPasswordException;
 use Storipress\WordPress\Exceptions\InvalidAuthorIdException;
 use Storipress\WordPress\Exceptions\InvalidParamException;
 use Storipress\WordPress\Exceptions\InvalidPostIdException;
@@ -139,23 +140,24 @@ abstract class Request
             $error = WordPressError::from($payload);
 
             throw match ($error->code) {
-                'term_exists' => new TermExistsException($error, $status),
                 'duplicate_term_slug' => new DuplicateTermSlugException($error, $status),
+                'existing_user_email' => new UserEmailExistsException($error, $status),
+                'existing_user_login' => new UsernameExistsException($error, $status),
+                'incorrect_password' => new IncorrectPasswordException($error, $status),
+                'rest_already_trashed' => new PostAlreadyTrashedException($error, $status),
                 'rest_cannot_create' => new CannotCreateException($error, $status),
-                'rest_cannot_update' => new CannotUpdateException($error, $status),
                 'rest_cannot_edit' => new CannotEditException($error, $status),
-                'rest_upload_unknown_error' => new UploadUnknownErrorException($error, $status),
+                'rest_cannot_update' => new CannotUpdateException($error, $status),
+                'rest_forbidden' => new RestForbiddenException($error, $status),
+                'rest_invalid_author' => new InvalidAuthorIdException($error, $status),
+                'rest_invalid_param' => new InvalidParamException($error, $status),
                 'rest_no_route' => new NoRouteException($error, $status),
                 'rest_post_invalid_id' => new InvalidPostIdException($error, $status),
                 'rest_post_invalid_page_number' => new InvalidPostPageNumberException($error, $status),
-                'rest_invalid_param' => new InvalidParamException($error, $status),
+                'rest_upload_unknown_error' => new UploadUnknownErrorException($error, $status),
                 'rest_user_invalid_id' => new InvalidUserIdException($error, $status),
                 'rest_user_invalid_slug' => new InvalidUserSlugException($error, $status),
-                'existing_user_login' => new UsernameExistsException($error, $status),
-                'existing_user_email' => new UserEmailExistsException($error, $status),
-                'rest_invalid_author' => new InvalidAuthorIdException($error, $status),
-                'rest_already_trashed' => new PostAlreadyTrashedException($error, $status),
-                'rest_forbidden' => new RestForbiddenException($error, $status),
+                'term_exists' => new TermExistsException($error, $status),
                 'wp_die' => new WpDieException($error, $status),
                 default => new UnknownException($error, $status),
             };
