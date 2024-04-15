@@ -11,8 +11,11 @@ use JsonSchema\Validator;
 use stdClass;
 use Storipress\WordPress\Exceptions\BadRequestException;
 use Storipress\WordPress\Exceptions\CannotCreateException;
+use Storipress\WordPress\Exceptions\CannotCreateUserException;
 use Storipress\WordPress\Exceptions\CannotEditException;
+use Storipress\WordPress\Exceptions\CannotEditOthersException;
 use Storipress\WordPress\Exceptions\CannotUpdateException;
+use Storipress\WordPress\Exceptions\CannotViewUserException;
 use Storipress\WordPress\Exceptions\DuplicateTermSlugException;
 use Storipress\WordPress\Exceptions\ForbiddenException;
 use Storipress\WordPress\Exceptions\IncorrectPasswordException;
@@ -27,6 +30,7 @@ use Storipress\WordPress\Exceptions\NotFoundException;
 use Storipress\WordPress\Exceptions\PostAlreadyTrashedException;
 use Storipress\WordPress\Exceptions\RestForbiddenException;
 use Storipress\WordPress\Exceptions\TermExistsException;
+use Storipress\WordPress\Exceptions\TermInvalidException;
 use Storipress\WordPress\Exceptions\UnauthorizedException;
 use Storipress\WordPress\Exceptions\UnexpectedValueException;
 use Storipress\WordPress\Exceptions\UnknownException;
@@ -161,7 +165,9 @@ abstract class Request
                 'incorrect_password' => new IncorrectPasswordException($error, $status),
                 'rest_already_trashed' => new PostAlreadyTrashedException($error, $status),
                 'rest_cannot_create' => new CannotCreateException($error, $status),
+                'rest_cannot_create_user' => new CannotCreateUserException($error, $status),
                 'rest_cannot_edit' => new CannotEditException($error, $status),
+                'rest_cannot_edit_others' => new CannotEditOthersException($error, $status),
                 'rest_cannot_update' => new CannotUpdateException($error, $status),
                 'rest_forbidden' => new RestForbiddenException($error, $status),
                 'rest_invalid_author' => new InvalidAuthorIdException($error, $status),
@@ -169,7 +175,9 @@ abstract class Request
                 'rest_no_route' => new NoRouteException($error, $status),
                 'rest_post_invalid_id' => new InvalidPostIdException($error, $status),
                 'rest_post_invalid_page_number' => new InvalidPostPageNumberException($error, $status),
+                'rest_term_invalid' => new TermInvalidException($error, $status),
                 'rest_upload_unknown_error' => new UploadUnknownErrorException($error, $status),
+                'rest_user_cannot_view' => new CannotViewUserException($error, $status),
                 'rest_user_invalid_id' => new InvalidUserIdException($error, $status),
                 'rest_user_invalid_slug' => new InvalidUserSlugException($error, $status),
                 'term_exists' => new TermExistsException($error, $status),
