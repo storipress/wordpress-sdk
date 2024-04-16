@@ -9,6 +9,7 @@ use Storipress\WordPress\Requests\Category;
 use Storipress\WordPress\Requests\GeneralRequest;
 use Storipress\WordPress\Requests\Media;
 use Storipress\WordPress\Requests\Post;
+use Storipress\WordPress\Requests\PostRevision;
 use Storipress\WordPress\Requests\Site;
 use Storipress\WordPress\Requests\Tag;
 use Storipress\WordPress\Requests\User;
@@ -20,6 +21,8 @@ class WordPress
     protected readonly User $user;
 
     protected readonly Post $post;
+
+    protected readonly PostRevision $postRevision;
 
     protected readonly Category $category;
 
@@ -49,6 +52,8 @@ class WordPress
         $this->user = new User($this);
 
         $this->post = new Post($this);
+
+        $this->postRevision = new PostRevision($this);
 
         $this->category = new Category($this);
 
@@ -149,6 +154,11 @@ class WordPress
     public function post(): Post
     {
         return $this->post;
+    }
+
+    public function postRevision(): PostRevision
+    {
+        return $this->postRevision;
     }
 
     public function category(): Category
