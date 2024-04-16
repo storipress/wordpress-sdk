@@ -1,5 +1,14 @@
 ## 1.x
 
+- 1.0.15 (2024-04-16)
+  - Add post revisions endpoint
+  - Add exceptions
+    - incorrect_password
+    - rest_cannot_create_user
+    - rest_cannot_edit_others
+    - rest_term_invalid
+    - rest_user_cannot_view
+
 - 1.0.14 (2024-03-21)
   - Add exceptions
     - rest_cannot_edit
