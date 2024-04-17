@@ -53,14 +53,14 @@ class Post extends WordPressObject
     public stdClass $meta;
 
     /**
-     * @var int[]
+     * @var array<int, int>
      */
-    public array $categories;
+    public array $categories = [];
 
     /**
-     * @var int[]
+     * @var array<int, int>
      */
-    public array $tags;
+    public array $tags = [];
 
     public static function from(stdClass $data): static
     {
