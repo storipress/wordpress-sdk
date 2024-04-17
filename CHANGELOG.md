@@ -1,5 +1,8 @@
 ## 1.x
 
+- 1.0.16 (2024-04-17)
+  - Fix ACF plugin compatibility
+
 - 1.0.15 (2024-04-16)
   - Add post revisions endpoint
   - Add exceptions
