@@ -1,5 +1,8 @@
 ## 1.x
 
+- 1.0.17 (2024-04-24)
+  - Fix 5xx status exception
+
 - 1.0.16 (2024-04-17)
   - Fix ACF plugin compatibility
 
