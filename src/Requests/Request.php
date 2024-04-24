@@ -105,7 +105,7 @@ abstract class Request
 
         if (! $response->successful()) {
             $this->toException(
-                $payload,
+                $payload ?: new stdClass(),
                 $response->body(),
                 $response->status(),
             );
