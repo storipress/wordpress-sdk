@@ -1,5 +1,8 @@
 ## 1.x
 
+- 1.0.18 (2024-05-24)
+  - Fix request method when updating item
+
 - 1.0.17 (2024-04-24)
   - Fix 5xx status exception
 
