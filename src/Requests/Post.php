@@ -73,7 +73,7 @@ class Post extends Request
     {
         $uri = sprintf('/posts/%d', $postId);
 
-        $data = $this->request('patch', $uri, $arguments);
+        $data = $this->request('post', $uri, $arguments);
 
         return PostObject::from($data);
     }

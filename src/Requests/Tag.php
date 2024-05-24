@@ -73,7 +73,7 @@ class Tag extends Request
     {
         $uri = sprintf('/tags/%d', $tagId);
 
-        $data = $this->request('patch', $uri, $arguments);
+        $data = $this->request('post', $uri, $arguments);
 
         return TagObject::from($data);
     }

@@ -77,7 +77,7 @@ class Media extends Request
     {
         $uri = sprintf('/media/%d', $mediaId);
 
-        $data = $this->request('patch', $uri, $arguments);
+        $data = $this->request('post', $uri, $arguments);
 
         return MediaObject::from($data);
     }

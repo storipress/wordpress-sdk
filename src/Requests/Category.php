@@ -73,7 +73,7 @@ class Category extends Request
     {
         $uri = sprintf('/categories/%d', $categoryId);
 
-        $data = $this->request('patch', $uri, $arguments);
+        $data = $this->request('post', $uri, $arguments);
 
         return CategoryObject::from($data);
     }

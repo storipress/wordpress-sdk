@@ -73,7 +73,7 @@ class User extends Request
     {
         $uri = sprintf('/users/%d', $userId);
 
-        $data = $this->request('patch', $uri, $arguments);
+        $data = $this->request('post', $uri, $arguments);
 
         return UserObject::from($data);
     }
