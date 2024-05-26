@@ -1,5 +1,8 @@
 ## 1.x
 
+- 1.0.19 (2024-05-27)
+  - Fix incorrect query parameters on non-pretty permalinks site
+
 - 1.0.18 (2024-05-24)
   - Fix request method when updating item
 
