@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Storipress\WordPress\Requests;
 
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\UploadedFile;
 use JsonSchema\Constraints\Constraint;
@@ -69,7 +70,10 @@ abstract class Request
         array $options = [],
         bool $expectArray = false,
     ): stdClass|array|bool {
-        $http = $this->app->http
+        $http = $this->app
+            ->http
+            ->acceptJson()
+            ->baseUrl(rtrim($this->app->url(), '/'))
             ->withoutVerifying()
             ->withoutRedirecting()
             ->withBasicAuth($this->app->username(), $this->app->password());
@@ -89,11 +93,7 @@ abstract class Request
         }
 
         $response = $http->{$method}(
-            $this->getUrl(
-                $path,
-                $this->app->prefix(),
-                $this->app->isPrettyUrl(),
-            ),
+            $this->getUrl($path, $http),
             $options,
         );
 
@@ -130,24 +130,27 @@ abstract class Request
         return $payload;
     }
 
-    public function getUrl(string $path, string $prefix, bool $pretty): string
+    public function getUrl(string $path, PendingRequest $http): string
     {
-        if ($pretty) {
-            return sprintf(
-                '%s/%s/wp/%s/%s',
-                rtrim($this->app->url(), '/'),
-                $prefix,
-                self::VERSION,
-                ltrim($path, '/'),
-            );
-        }
-
-        return sprintf(
-            '%s?rest_route=/wp/%s/%s',
-            rtrim($this->app->url(), '/'),
+        $route = sprintf(
+            '/wp/%s/%s',
             self::VERSION,
             ltrim($path, '/'),
         );
+
+        if ($this->app->isPrettyUrl()) {
+            return sprintf(
+                '/%s/%s',
+                trim($this->app->prefix(), '/'),
+                ltrim($route, '/'),
+            );
+        }
+
+        $http->withQueryParameters([
+            'rest_route' => $route,
+        ]);
+
+        return '/';
     }
 
     /**

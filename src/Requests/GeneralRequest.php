@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Storipress\WordPress\Requests;
 
+use Illuminate\Http\Client\PendingRequest;
 use stdClass;
 use Storipress\WordPress\Exceptions\WordPressException;
 
@@ -56,21 +57,20 @@ class GeneralRequest extends Request
         return $this->request('delete', $path, $arguments);
     }
 
-    public function getUrl(string $path, string $prefix, bool $pretty): string
+    public function getUrl(string $path, PendingRequest $http): string
     {
-        if ($pretty) {
+        if ($this->app->isPrettyUrl()) {
             return sprintf(
-                '%s/%s/%s',
-                rtrim($this->app->url(), '/'),
-                $prefix,
+                '/%s/%s',
+                trim($this->app->prefix(), '/'),
                 ltrim($path, '/'),
             );
         }
 
-        return sprintf(
-            '%s?rest_route=/%s',
-            rtrim($this->app->url(), '/'),
-            ltrim($path, '/'),
-        );
+        $http->withQueryParameters([
+            'rest_route' => sprintf('/%s', ltrim($path, '/')),
+        ]);
+
+        return '/';
     }
 }
